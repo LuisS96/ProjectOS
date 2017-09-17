@@ -1,0 +1,15 @@
+Oscar munoz
+ 
+Class Orden(tipo,tamanio,ingredientes,toGo)
+	assert type(tipo) is string
+	assert type(tamanio) is int
+	assert type(ingredientes) is string
+	assert type(here/toGo) is boolean
+	self.t = tipo
+	self.size = tamanio
+	self.ing = ingredientes
+	self.toGo = toGo
+
+queues:toGo, ordenes, ordenes grandes, wait, blocked
+	
+def taquero(orden)
