@@ -34,3 +34,29 @@ def read_order():
                 tacos_adobada.put(d)
 read_order()
 
+#Table
+raw_data= {'Queues': ['Asada', 'Adobada', 'Otros'],
+           'Quantity': [tacos_asada.qsize(),tacos_adobada.qsize(),tacos_otros.qsize()]}
+df = pd.DataFrame(raw_data, columns = ['Queues', 'Quantity'])
+
+def pie_chart():
+    raw_data= {'Queues': ['Asada', 'Adobada', 'Otros'],
+               'Quantity': [tacos_asada.qsize(),tacos_adobada.qsize(),tacos_otros.qsize()]}
+    df = pd.DataFrame(raw_data, columns = ['Queues', 'Quantity'])
+    print(df)
+
+    colors = ["cornflowerblue", "orangered", "gold"]
+    plt.pie(
+        df['Quantity'],
+        labels=df['Queues'],
+        shadow=False,
+        colors=colors,
+        startangle=90,
+        autopct='%1.1f%%',
+        )
+    plt.axis('equal')
+
+    plt.tight_layout()
+    plt.show()
+
+pie_chart()
