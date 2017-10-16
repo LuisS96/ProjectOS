@@ -20,11 +20,11 @@ class Orden():
         print('ID: ', Id, '\nType: ', Type, '\nMeat: ', meat, '\nQuantity: ', qty,'\n')
 
 def read_order():
-    with open ('test.txt') as jsfl:
+    with open ('test.txt') as jsfl: #reads file json
         data = json.load(jsfl)
-    for d in data:
+    for d in data: #for each order there is
         print('\nNew Order','\nID: ', d['request_id'], '        ',d['datetime'], '\n')
-        for i in d['orden']:
+        for i in d['orden']: #sub-array of each order that will be addeded to a queue.
             tacos = Orden(i['part_id'], i['type'], i['meat'], i['quantity'], i['ingredients'])
             if tacos.meat == "asada":
                 tacos_asada.put(d)
@@ -38,13 +38,9 @@ read_order()
 raw_data= {'Queues': ['Asada', 'Adobada', 'Otros'],
            'Quantity': [tacos_asada.qsize(),tacos_adobada.qsize(),tacos_otros.qsize()]}
 df = pd.DataFrame(raw_data, columns = ['Queues', 'Quantity'])
+print(df)
 
 def pie_chart():
-    raw_data= {'Queues': ['Asada', 'Adobada', 'Otros'],
-               'Quantity': [tacos_asada.qsize(),tacos_adobada.qsize(),tacos_otros.qsize()]}
-    df = pd.DataFrame(raw_data, columns = ['Queues', 'Quantity'])
-    print(df)
-
     colors = ["cornflowerblue", "orangered", "gold"]
     plt.pie(
         df['Quantity'],
