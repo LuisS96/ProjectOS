@@ -59,4 +59,25 @@ def pie_chart():
     plt.tight_layout()
     plt.show()
 
+def bar_chart():
+    length = list(range(len(df["Quantity"])))
+    fig, ax = plt.subplots(figsize=(10,5))
+    plt.bar([p + .375 for p in length],
+            df["Quantity"],
+            0.25,
+            color="orangered",
+            label=df["Queues"]
+            )
+    ax.set_ylabel('Total')
+    ax.set_title('Tacos')
+    ax.set_xticks([p + 1.5 * 0.25 for p in length])
+    ax.set_xticklabels(df['Queues'])
+
+    plt.xlim(min(length)-.25, max(length)+0.25*4)
+    plt.ylim([0, max(df['Quantity']) + 1])
+    plt.grid()
+    plt.show()
+
+
 pie_chart()
+bar_chart()
