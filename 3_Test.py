@@ -33,15 +33,16 @@ def read_order():
                 tacos_adobada.put(d)
             else:
                 tacos_otros.put(d)
+    setPriority()
             
 read_order()
 def setPriority():
-    with open ('test.txt') as jsfl:
+    with open ('test.txt') as jsfl:#read json file
         data = json.load(jsfl)
-    for o in data:
+    for o in data:#get every order
         for i in o['orden']:
             d = Orden(i['part_id'], i['type'], i['meat'], i['quantity'], i['ingredients'])
-            if d.qty <= 0:
+            if d.qty <= 0:#first priority fix based on tacos cuantity in order
                 return "La orden esta vacia"
             if d.qty > 0 and d.qty <= 6:
                 d.priority = 0
@@ -49,8 +50,8 @@ def setPriority():
                 d.priority = 1
             else:
                 d.priority == 2
-            print("Priority: ", d.priority)
-setPriority()
+            print("Priority: ", d.priority)#show the fixed priority
+
 
 #Table
 raw_data= {'Queues': ['Asada', 'Adobada', 'Otros'],
