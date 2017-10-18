@@ -4,10 +4,12 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from queue import *
 
+#Queues are created for their later use.
 tacos_asada = Queue()
 tacos_otros = Queue()
 tacos_adobada = Queue()
 
+#Class Orden is created as a parameter for each order received.
 class Orden():
     def __init__(self, Id, Type, meat, qty, ingr, to_go = False):
         self.Id = Id
@@ -18,20 +20,29 @@ class Orden():
         self.ingr = ingr
         self.to_go = to_go
         print('ID: ', Id, '\nType: ', Type, '\nMeat: ', meat, '\nQuantity: ', qty,'\n')
+    #def __str__(self): 
+        #return 'ID: {0} \nType: {1} \nMeat: {2} \nQuantity: {3} \nIngredients: {4} \nTo go: {5}'.format(self.Id, self.Type, self.meat, self.qty, self.ingr, self.to_go)
+    #def __iter__(self):
+        #return self
 
+#Reads order from a list of dictionaries
 def read_order():
+    #In the time, we will be reading from a file named test.txt as if it was from an SQS message.
     with open ('test.txt') as jsfl: #reads file json
         data = json.load(jsfl)
-    for d in data: #for each order there is
+    #First we count the amount of orders there are in our list of dictionaries. Each dictionary is classified by an order named 'order'.
+    for d in data:
         print('\nNew Order','\nID: ', d['request_id'], '        ',d['datetime'], '\n')
+        #We read each dictionary.
         for i in d['orden']: #sub-array of each order that will be addeded to a queue.
             tacos = Orden(i['part_id'], i['type'], i['meat'], i['quantity'], i['ingredients'])
             if tacos.meat == "asada":
                 tacos_asada.put(d)
-            if tacos.meat == "tripa" or tacos.meat == "cabeza" or tacos.meat == "suadero" or tacos.meat == "lengua":
-                tacos_otros.put(d)
-            if tacos.meat == "adobada":
+            elif tacos.meat == "adobada":
                 tacos_adobada.put(d)
+            else:
+                tacos_otros.put(d)
+            
 read_order()
 
 #Table
