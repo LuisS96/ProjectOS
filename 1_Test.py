@@ -13,17 +13,18 @@ tacos_adobada = Queue()
 class Orden():
     def __init__(self, Id, Type, meat, qty, ingr, to_go = False):
         self.Id = Id
+        self.priority = 0
         self.time = str(datetime.now())
         self.Type = Type
         self.meat = meat
         self.qty = qty
         self.ingr = ingr
         self.to_go = to_go
-        print('ID: ', Id, '\nType: ', Type, '\nMeat: ', meat, '\nQuantity: ', qty,'\n')
-    #def __str__(self): 
-        #return 'ID: {0} \nType: {1} \nMeat: {2} \nQuantity: {3} \nIngredients: {4} \nTo go: {5}'.format(self.Id, self.Type, self.meat, self.qty, self.ingr, self.to_go)
-    #def __iter__(self):
-        #return self
+        #print('ID: ', Id, '\nType: ', Type, '\nMeat: ', meat, '\nQuantity: ', qty)
+    def __str__(self): 
+        return 'ID: {0} \nType: {1} \nMeat: {2} \nQuantity: {3} \nIngredients: {4} \nTo go: {5}'.format(self.Id, self.Type, self.meat, self.qty, self.ingr, self.to_go)
+    def __iter__(self):
+        return self
 
 #Reads order from a list of dictionaries
 def read_order():
@@ -42,6 +43,16 @@ def read_order():
                 tacos_adobada.put(d)
             else:
                 tacos_otros.put(d)
+            c = int(tacos.qty)
+            if c <= 0:#First priority fix based on tacos quantity in order
+                return "La orden esta vacia"
+            if (c > 0) and (c <= 6):
+                tacos.priority = 1
+            elif (c > 6) and (c <= 12):
+                tacos.priority = 2
+            else:
+                tacos.priority = 3
+            print(tacos ,"\nPriority: ", tacos.priority,'\n')
             
 read_order()
 
