@@ -63,9 +63,13 @@ raw_data= {'Queues': ['Asada', 'Adobada', 'Otros'],
 df = pd.DataFrame(raw_data, columns = ['Queues', 'Quantity'])
 print(df)
 
-def pie_chart():
+def charts():
+#pie chart 
+    plt.style.use("ggplot")
     colors = ["cornflowerblue", "orangered", "gold"]
-    plt.pie(
+    fig, axes = plt.subplots(ncols = 2,figsize=(10,10))
+    ax1,ax2 = axes.ravel()
+    ax1.pie(
         df['Quantity'],
         labels=df['Queues'],
         shadow=False,
@@ -73,35 +77,37 @@ def pie_chart():
         startangle=90,
         autopct='%1.1f%%',
         )
-    plt.axis('equal')
+    ax1.axis('equal')
+    ax1.margins(1)
+    #plt.tight_layout()
+    #a = plt.figure(1)
+    #a.show()
 
-    plt.tight_layout()
-    a = plt.figure(1)
-    a.show()
-
-def bar_chart():
+#bars chart
+    
     length = list(range(len(df["Quantity"])))
-    fig, ax = plt.subplots(figsize=(10,5))
-    plt.bar([p + .375 for p in length],
+    ax2.bar([p + .375 for p in length],
             df["Quantity"],
             0.25,
             color="orangered",
             label=df["Queues"]
             )
-    ax.set_ylabel('Total')
-    ax.set_title('Tacos')
-    ax.set_xticks([p + 1.5 * 0.25 for p in length])
-    ax.set_xticklabels(df['Queues'])
+    ax2.set_ylabel('Total')
+    ax2.set_title('Tacos')
+    ax2.set_xticks([p + 1.5 * 0.25 for p in length])
+    ax2.set_xticklabels(df['Queues'])
 
     plt.xlim(min(length)-.25, max(length)+0.25*4)
     plt.ylim([0, max(df['Quantity']) + 1])
     plt.grid()
-    b = plt.figure(2)
-    b.show()
+    #b = plt.figure(2)
+    #b.show()
+    fig.tight_layout()
+    fig.subplots_adjust(hspace=100)
+    plt.show()
 
-t = Thread(target=pie_chart())
-t1 = Thread(target=bar_chart())
-t.start()
-t1.start()
+
+charts()
+
 
 
