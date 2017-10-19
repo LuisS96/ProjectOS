@@ -3,6 +3,7 @@ from datetime import datetime
 import pandas as pd
 import matplotlib.pyplot as plt
 from queue import *
+from threading import Thread
 
 #Queues are created for their later use.
 tacos_asada = Queue()
@@ -75,7 +76,8 @@ def pie_chart():
     plt.axis('equal')
 
     plt.tight_layout()
-    plt.show()
+    a = plt.figure(1)
+    a.show()
 
 def bar_chart():
     length = list(range(len(df["Quantity"])))
@@ -94,8 +96,12 @@ def bar_chart():
     plt.xlim(min(length)-.25, max(length)+0.25*4)
     plt.ylim([0, max(df['Quantity']) + 1])
     plt.grid()
-    plt.show()
+    b = plt.figure(2)
+    b.show()
+
+t = Thread(target=pie_chart())
+t1 = Thread(target=bar_chart())
+t.start()
+t1.start()
 
 
-pie_chart()
-bar_chart()
