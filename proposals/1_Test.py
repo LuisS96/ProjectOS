@@ -30,7 +30,7 @@ class Orden():
 #Reads order from a list of dictionaries
 def read_order():
     #In the time, we will be reading from a file named test.txt as if it was from an SQS message.
-    with open ('test.txt') as jsfl: #reads file json
+    with open ('Order.json') as jsfl: #reads file json
         data = json.load(jsfl)
     #First we count the amount of orders there are in our list of dictionaries. Each dictionary is classified by an order named 'order'.
     for d in data:
