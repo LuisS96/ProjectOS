@@ -7,8 +7,24 @@ import matplotlib.pyplot as plt
 def charts(df):
     plt.style.use("dark_background")
     colors = ["cornflowerblue", "orangered", "gold","r","limegreen","m","b","coral","yellow"]
-    fig, axes = plt.subplots(ncols = 2,figsize=(10,10))
-    ax1,ax2 = axes.ravel()
+    fig, axes = plt.subplots(ncols = 3,figsize=(15,10))
+    ax1,ax2,ax3 = axes.ravel()
+
+    # Table
+    meat = []
+    for i in df['Quantity']:
+        meat.append([i])
+    columns = ['Quantity']
+    rows = ['Asada', 'Adobada', 'Otros']
+    ax3.axis('off')
+    table = ax3.table(cellText=meat,
+              cellColours=[['black'] * len(meat[0])] * len(meat),
+              colLabels=columns,
+              colColours=['black'] * len(columns),
+              rowLabels=rows,
+              rowColours=colors,
+              loc='center')
+    table.scale(.3,1.5)
 
     #Pie chart
     ax1.pie(
@@ -27,7 +43,7 @@ def charts(df):
     ax2.bar([p + .375 for p in length],
             df["Quantity"],
             0.25,
-            color="orangered",
+            color=colors,
             label=df["Queues"]
             )
     ax2.set_ylabel('Total')
