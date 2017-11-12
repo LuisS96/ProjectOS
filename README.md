@@ -2,8 +2,52 @@
 <img src="https://betanews.com/wp-content/uploads/2016/08/operating-system.jpg" width=700 height=450>
 </p>
 <h1>Project OS</h1>
-Simulation of a taco stand called "Tacos el Franc" as an Operating System (OS).
-
+<p>
+  Simulation of a taco stand called "Tacos el Franc" as an Operating System (OS).
+</p>
+<ul>
+  It is established as following:
+  <li>
+    3 Taqueros:  
+  </li>
+  <ul>
+    <li>1 for Asada</li>
+    <li>1 for Adobada</li>
+    <li>1 for Others:</li>
+    <ul>
+      <li>
+        Lengua
+      </li>
+      <li>
+        Cabeza
+      </li>
+      <li>
+        Tripa
+      </li>
+      <li>
+        Suadero
+      </li>
+    </ul>
+  </ul>
+  <p></p>
+  <p>
+    Each taquero is considered as a Thread and can only process one order at a time. Inside a Thread's task, considering the size of the order, ingredients and priority given, are:
+  </p>
+  <ul>
+    <li>
+      Evaluate each order.
+    </li>
+    <li>
+      Select when to put an order in "hold" and when to continue.
+    </li>
+    <li>
+      Can maximum "prepare" two tacos when an order is taken or continued.
+    </li>
+    <li>
+      Complete an order when finished.
+    </li>
+  </ul>
+</ul>
 <h2><a href="TOC"></a>Table of Contents</h2>
 <div id="TOC">
   <ol>
@@ -86,7 +130,7 @@ The software is designed to be installed locally (Linux). For the moment there i
   <a href="https://github.com/OJMS14">@OJMS14</a>
   </li>
   <li>
-  <a href="https://github.com/mariotitioka">@mariotitioka</a>
+  <a href="https://github.com/MarioCarvajal">@MarioCarvajal</a>
   </li>
   <li>
   <a href="https://github.com/LuisS96">@LuisS96</a>
