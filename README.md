@@ -6,7 +6,7 @@
   Simulation of a taco stand called "Tacos el Franc" as an Operating System (OS).
 </p>
 <p>
-  It is established as follow:
+  It is established as follows:
 </p>
 <ul>
   <li>
