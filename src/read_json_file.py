@@ -15,7 +15,6 @@ def read_order(file):
             try:
                 with open(file) as jsfl:
                     data = json.load(jsfl)
-                print(data)
                 return data
             except:
                 print("Make sure your json file is correctly written")
