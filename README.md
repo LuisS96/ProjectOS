@@ -5,8 +5,10 @@
 <p>
   Simulation of a taco stand called "Tacos el Franc" as an Operating System (OS).
 </p>
-<ul>
+<p>
   It is established as following:
+</p>
+<ul>
   <li>
     3 Taqueros:  
   </li>
@@ -41,7 +43,7 @@
       Select when to put an order in "hold" and when to continue.
     </li>
     <li>
-      Can maximum "prepare" two tacos when an order is taken or continued.
+      Can "prepare" a maximum of two tacos when an order is taken or continued.
     </li>
     <li>
       Complete an order when finished.
@@ -55,7 +57,7 @@
       <a href="#getting_started">Getting Started</a>
     </li>
     <li>
-      <a href="#prerequisites">Prerequesites</a>
+      <a href="#prerequisites">Prerequisites</a>
     </li>
     <li>
       <a href="#installation">Installation</a>
@@ -83,7 +85,7 @@ These instructions will get you a copy of the project up and running on your loc
   </h2>
 </div>
 <p>
-List of elements that are needed to be installed to run the code properly
+List of elements that are needed to be installed to run the code properly.
 </p>
 <ul>
   <li>
@@ -94,7 +96,7 @@ List of elements that are needed to be installed to run the code properly
   </li>
   <li>
     <b>Pandas3</b>
-    <p>To install using the terminal try:</p>
+    <p>To install, using the terminal, try:</p>
     <pre>sudo apt-get install python3-pandas</pre>
     <p>or</p>
     <pre>sudo pip3 install pandas</pre>
@@ -104,7 +106,7 @@ List of elements that are needed to be installed to run the code properly
   </li>
   <li>
     <b>Matplotlib</b>
-    <p>To install using the terminal try:</p>
+    <p>To install, using the terminal, try:</p>
     <pre>sudo apt-get install python3-matplotlib</pre>
     <p>or</p>
     <pre>sudo pip3 install matplotlib</pre>
