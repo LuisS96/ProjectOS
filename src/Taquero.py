@@ -5,6 +5,15 @@ from queue import *
 
 lock = Lock()
 
+#Checks order for completion by checking current ID
+def check_order(order_list,current):
+    for order in order_list:
+        if current.Id in order.list_subs:
+            order.list_subs.remove(current.Id)
+            if not order.list_subs:
+                print('ID: ', order.Id, '\tStatus: Order Finished')
+
+#Switches current suborder to the threads wait queue and places the next suborder as current.
 def Switch(wait_queue,current,next):
     current.wcycle += 1
     wait_queue.put(current)
@@ -91,7 +100,7 @@ def make_taco(guacamole,cilantro,salsa,cebolla,frijol,tortillas,cycle,current,ma
             break
     return guacamole,cilantro,salsa,cebolla,frijol,tortillas
 
-def taquero(tacos_queue):
+def taquero(tacos_queue, order_list):
     starting_tortillas(500) #define starting quantities for every ingredient
     produce_tortillas(.01,tacos_queue)
     cycle = 2
@@ -104,7 +113,7 @@ def taquero(tacos_queue):
     wait_queue = Queue()
     current = tacos_queue.get()
     while tacos_queue.empty() is False:
-        print('ID: ', current.Id, '\tStatus: Starting your suborder of tacos...', )
+        print('ID: ', current.Id, '\tStatus: Starting your suborder of tacos...')
         time.sleep(1)
         guacamole,cilantro,salsa,cebolla,frijol,tortillas = make_taco(guacamole,cilantro,salsa,cebolla,frijol,tortillas,cycle,current,0)
         next = tacos_queue.get()
@@ -114,7 +123,6 @@ def taquero(tacos_queue):
         #While for switch
         while current.qty > 0:
             current,next = Switch(wait_queue,current,next)
-            print('qty: ',current.qty,'id: ',current.Id)
             #Bonus cycles for huge orders
             if current.wcycle >= 8:
                 guacamole,cilantro,salsa,cebolla,frijol,tortillas = make_taco(guacamole,cilantro,salsa,cebolla,frijol,tortillas,cycle*4,current,0)
@@ -129,13 +137,16 @@ def taquero(tacos_queue):
                 guacamole,cilantro,salsa,cebolla,frijol,tortillas = make_taco(guacamole,cilantro,salsa,cebolla,frijol,tortillas,cycle,current,0)
             if current.qty == 1:
                 guacamole,cilantro,salsa,cebolla,frijol,tortillas = make_taco(guacamole,cilantro,salsa,cebolla,frijol,tortillas,1,current,0)
-        print('ID: ', current.Id, '\tStatus: Suborder finished', )
+        print('ID: ', current.Id, '\tStatus: Suborder finished')
+        check_order(order_list, current)
         current = next
     #Finishing the last order
     while next.qty > 0:
         current = next
         guacamole,cilantro,salsa,cebolla,frijol,tortillas = make_taco(guacamole,cilantro,salsa,cebolla,frijol,tortillas,cycle,current,0)
-    print('ID: ', current.Id, '\tStatus: Resume...', )
-    print('ID: ', current.Id, '\tStatus: Finished', )
+    print('ID: ', current.Id, '\tStatus: Resume...')
+    print('ID: ', current.Id, '\tStatus: Suborder finished')
+    check_order(order_list, current)
+
 
 

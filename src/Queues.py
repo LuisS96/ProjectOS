@@ -7,13 +7,14 @@ def queues(data):
     asada_queue = Queue()
     adobada_queue = Queue()
     others_queue = Queue()
+    order_list = []
     # In the time, we will be reading from a file named test.txt as if it was from an SQS message.
     for order in data:
-        # print('\nNew Order', '\nID: ', order['request_id'], '\t', 'time: ',order['datetime'], '\n')
+        order_data = orden(order['request_id'], order['datetime'])
         # We read each dictionary.
-        for suborder in order['orden']:  # sub-array of each order that will be addeded to a queue.
-            tacos = Orden(suborder['part_id'], suborder['type'], suborder['meat'], suborder['quantity'],
-                          suborder['ingredients'])
+        for suborder in order['orden']:  # sub-array of each order that will be added to a queue.
+            tacos = suborden(suborder['part_id'], suborder['type'], suborder['meat'], suborder['quantity'], suborder['ingredients'])
+            order_data.list_subs.append(tacos.Id)
             # print(tacos)
             if tacos.meat == 'asada':
                 asada_queue.put(tacos)
@@ -21,5 +22,6 @@ def queues(data):
                 adobada_queue.put(tacos)
             else:
                 others_queue.put(tacos)
+        order_list.append(order_data)
     queue_list = [asada_queue, adobada_queue, others_queue]
-    return queue_list
+    return queue_list, order_list

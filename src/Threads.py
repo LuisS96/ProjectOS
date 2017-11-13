@@ -3,10 +3,10 @@ import pandas as pd
 from Taquero import *
 
 # parallel threading
-def Throw_Threads(queue_list):
+def Throw_Threads(queue_list,order_list):
     thread_list = []
     for t in queue_list:
-        thread = Thread(target=taquero, args=(t,), daemon=True)
+        thread = Thread(target=taquero, args=(t,order_list), daemon=True)
         thread_list.append(thread)
         thread.start()
     for thread in thread_list:
