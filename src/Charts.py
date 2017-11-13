@@ -57,5 +57,3 @@ def charts(df):
     fig.tight_layout()
     fig.subplots_adjust(hspace=100)
     plt.show()
-
-charts(df)

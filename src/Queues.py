@@ -1,4 +1,5 @@
 from queue import *
+from class_order import *
 
 # Reads order from a list of dictionaries and place them in queues
 def queues(data):

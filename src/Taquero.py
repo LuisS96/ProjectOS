@@ -1,4 +1,3 @@
-from threading import Thread
 from threading import Lock
 from threading import Timer
 import time as time

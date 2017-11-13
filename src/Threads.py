@@ -1,5 +1,6 @@
 from threading import Thread
 import pandas as pd
+from Taquero import *
 
 # parallel threading
 def Throw_Threads(queue_list):
