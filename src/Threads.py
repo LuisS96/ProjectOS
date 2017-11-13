@@ -11,8 +11,8 @@ def Throw_Threads(queue_list,order_list):
         thread.start()
     for thread in thread_list:
         thread.join()
-    raw_data = {'Queues': ['Asada', 'Adobada', 'Otros'],
-                'Quantity': [queue_list[0].qsize(), queue_list[1].qsize(), queue_list[2].qsize()]}
-    df = pd.DataFrame(raw_data, columns=['Queues', 'Quantity'])
+    raw_data = {"Order":[order.Id for order in order_list],
+                "Time of completion": [(order.endTime-order.startTime).total_seconds() for order in order_list]}
+    df = pd.DataFrame(raw_data, columns=['Order', 'Time of completion'])
     print(df)
-    return df
+    return df,order_list

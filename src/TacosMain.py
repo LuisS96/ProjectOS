@@ -12,7 +12,7 @@ order = read_order(file)
 queue,order_list = queues(order) #order_list = list of orders used to know when an order is completed
 
 #For each taquero a thread is created, and will prepared the order of tacos
-taquero = Throw_Threads(queue,order_list)
+taquero,order_list = Throw_Threads(queue,order_list)
 
 #Create the charts according to the statistics of a taquero
-charts(taquero)
+charts(taquero,order_list)

@@ -2,12 +2,14 @@ from datetime import datetime
 
 # Class order is created as a parameter for each order received.
 class orden():
-    def __init__(self, Id, time):
+    def __init__(self, Id):
         self.Id = Id  # integer
-        self.time = time  # datetime
+        # self.startTime = datetime.strptime(startTime,"%Y-%m-%d %H:%M:%S")  # datetime
+        self.startTime = datetime.now()
+        self.endTime = None #end time
         self.list_subs = []  # List of suborders to check if completed
     def __str__(self):
-        return 'ID: {0} \nTime: {1}'.format(self.Id, self.time)
+        return 'ID: {0} \nTime: {1}'.format(self.Id, self.startTime)
 
 class suborden():
     def __init__(self, Id, Type, meat, qty, ingr, to_go=False):

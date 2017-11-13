@@ -10,7 +10,7 @@ def queues(data):
     order_list = []
     # In the time, we will be reading from a file named test.txt as if it was from an SQS message.
     for order in data:
-        order_data = orden(order['request_id'], order['datetime'])
+        order_data = orden(order['request_id'])
         # We read each dictionary.
         for suborder in order['orden']:  # sub-array of each order that will be added to a queue.
             tacos = suborden(suborder['part_id'], suborder['type'], suborder['meat'], suborder['quantity'], suborder['ingredients'])

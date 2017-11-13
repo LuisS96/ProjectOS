@@ -1,6 +1,7 @@
 from threading import Lock
 from threading import Timer
 import time as time
+from datetime import datetime
 from queue import *
 
 lock = Lock()
@@ -11,6 +12,7 @@ def check_order(order_list,current):
         if current.Id in order.list_subs:
             order.list_subs.remove(current.Id)
             if not order.list_subs:
+                order.endTime = datetime.now()
                 print('ID: ', order.Id, '\tStatus: Order Finished')
 
 #Switches current suborder to the threads wait queue and places the next suborder as current.
