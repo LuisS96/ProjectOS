@@ -1,4 +1,3 @@
-import pandas as pd
 import matplotlib.pyplot as plt
 
 #Receives a DataFrame of at least two keys and two columns

@@ -4,7 +4,7 @@
 	{ "part_id": "123-220",  
 	"type": "taco", 
 	"meat": "asada", 
-	"quantity": 3, 
+	"quantity": 50,
 	"ingredients": [ "cebolla", "salsa"]
 	},
 	{ "part_id": "123-221", 
