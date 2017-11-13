@@ -19,8 +19,6 @@ class Orden():
         self.ingr = ingr #string
         self.to_go = to_go #boolean
         self.wcycle = 0 #integer - waited cycles
-        self.pause = False
-        self.finished = False
         # print('ID: ', Id, '\nType: ', Type, '\nMeat: ', meat, '\nQuantity: ', qty)
 
     def __str__(self):
@@ -79,20 +77,21 @@ queues(read_order(file))
 def Switch(wait_queue,current,next):
     current.wcycle += 1
     wait_queue.put(current)
+    print('ID: ', current.Id, '\tStatus: Pause...', )
     current = next
+    print('ID: ', current.Id, '\tStatus: Resume...', )
     next = wait_queue.get()
     return current,next
 
 
 def taquero(tacos_queue):
-    global cycle
     cycle = 2
     wait_queue = Queue()
     current = tacos_queue.get()
-    tacos_queue.task_done()
     while tacos_queue.empty() is False:
+        print('ID: ', current.Id, '\tStatus: Starting your order of tacos...', )
+        time.sleep(1)
         next = tacos_queue.get()
-        tacos_queue.task_done()
         current.qty -= cycle
         #According to size of order it forces to complete an order instead of increasing an overhead
         if current.qty == 1:
@@ -115,24 +114,26 @@ def taquero(tacos_queue):
                 current.qty -= cycle
             if current.qty == 1:
                 current.qty -= cycle
-        print(current)
+        print('ID: ', current.Id, '\tStatus: Finished', )
+        # print('\n',current)
         current = next
     #Finishing the last order
     while next.qty > 0:
         current = next
         current.qty -= cycle
-    print(current)
+    print('ID: ', current.Id, '\tStatus: Resume...', )
+    print('ID: ', current.Id, '\tStatus: Finished', )
+    # print(current)
 
-# Thread_adobada = Thread(taquero(adobada_queue))
-# Thread_others = Thread(taquero(others_queue))
-# Thread_asada = Thread(taquero(asada_queue))
-# Thread_others.setDaemon(True)
-# Thread_asada.setDaemon(True)
-# Thread_adobada.setDaemon(True)
-# Thread_others.start()
-# Thread_asada.start()
-# Thread_adobada.start()
+queue_list = [asada_queue,adobada_queue,others_queue]
+thread_list = []
+for t in queue_list:
+    thread = Thread(target=taquero, args=(t,), daemon=True)
+    thread_list.append(thread)
+    thread.start()
 
+for thread in thread_list:
+    thread.join()
 
 # TableThread_others.start()
 raw_data = {'Queues': ['Asada', 'Adobada', 'Otros'],
