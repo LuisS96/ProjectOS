@@ -89,7 +89,7 @@ def taquero(tacos_queue):
     wait_queue = Queue()
     current = tacos_queue.get()
     while tacos_queue.empty() is False:
-        print('ID: ', current.Id, '\tStatus: Starting your order of tacos...', )
+        print('ID: ', current.Id, '\tStatus: Starting your suborder of tacos...', )
         time.sleep(1)
         next = tacos_queue.get()
         current.qty -= cycle
@@ -114,7 +114,7 @@ def taquero(tacos_queue):
                 current.qty -= cycle
             if current.qty == 1:
                 current.qty -= cycle
-        print('ID: ', current.Id, '\tStatus: Finished', )
+        print('ID: ', current.Id, '\tStatus: Suborder finished', )
         # print('\n',current)
         current = next
     #Finishing the last order
@@ -122,7 +122,7 @@ def taquero(tacos_queue):
         current = next
         current.qty -= cycle
     print('ID: ', current.Id, '\tStatus: Resume...', )
-    print('ID: ', current.Id, '\tStatus: Finished', )
+    print('ID: ', current.Id, '\tStatus: Suborder finished', )
     # print(current)
 
 
