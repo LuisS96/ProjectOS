@@ -1,49 +1,32 @@
-from threading import Thread
 from threading import Lock
+from threading import Timer
 import time
 lock = Lock()
-class tortillas(object):
-    def __init__(self):
-        self.value = 500
-        self.lock = Lock()
+
+def starting_tortillas(starting_amount): #define the starting amount of tortillas
+    global tortillera_tortillas
+    tortillera_tortillas = starting_amount
     
-    def increment(self):
-        with self.lock:
-            self.value += 1
-tpt = tortillas()
-def tortillear():
-    if tpt.value >= 50:
+def produce_tortillas(time_to_produce): #define the time the tortillera need to produce a single tortilla
+    global tortillera_tortillas
+    
+    if tortillera_tortillas >= 50: #if more than 50 tortillas, keep producing tortillas and let the taquero take some
         with lock:
-            tpt.increment()
-            print(tpt.value)
-        time.sleep(.1)
+            tortillera_tortillas += 1 #add 1 tortilla to the total, wasting a define interval of time
         
     else:
-        while tpt.value < 50:
+        while tortillera_tortillas < 50: #if less than 50 tortillas, make up to 50 tortillas and dont let the taquero take any
             with lock:
-                tpt.increment()
-                print("ay mushashos ya van las tortillas")
-            time.sleep(.1)
-    tortillear()
+                tortillera_tortillas += 1
+            time.sleep(time_to_produce)
+    tortillera = Timer(time_to_produce, produce_tortillas,[time_to_produce]).start()
 
-def taquerear():
-    if tpt.value > 50:
+def grab_tortillas(interval): #refull the taquero's tortillas with the tortillas made from the tortilera
+    global tortillera_tortillas
+    
+    if tortillera_tortillas > 50:
         with lock:
-            tpt.value -= 50
-            print("agarre tacos cuca")
-        time.sleep(1)
+            tortillera_tortillas -= 50
+            
     else:
-        time.sleep(1)
-    taquerear()
-
-tortillera = Thread(target=tortillear)
-tortillera.setDaemon=True
-tortillera.start()
-taquero = Thread(target=taquerear)
-taquero.setDaemon=True
-taquero.start()
-ts = []
-ts.append(tortillera)
-ts.append(taquero)
-for t in ts:
-    t.join()
+        time.sleep(interval)
