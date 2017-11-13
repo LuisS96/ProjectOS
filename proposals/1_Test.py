@@ -125,21 +125,27 @@ def taquero(tacos_queue):
     print('ID: ', current.Id, '\tStatus: Finished', )
     # print(current)
 
-queue_list = [asada_queue,adobada_queue,others_queue]
-thread_list = []
-for t in queue_list:
-    thread = Thread(target=taquero, args=(t,), daemon=True)
-    thread_list.append(thread)
-    thread.start()
 
-for thread in thread_list:
-    thread.join()
 
-# TableThread_others.start()
-raw_data = {'Queues': ['Asada', 'Adobada', 'Otros'],
-            'Quantity': [asada_queue.qsize(), adobada_queue.qsize(), others_queue.qsize()]}
-df = pd.DataFrame(raw_data, columns=['Queues', 'Quantity'])
-print(df)
+#parallel threading
+def Throw_Threads(asada_queue, adobada_queue, others_queue):
+
+    queue_list = [asada_queue, adobada_queue, others_queue]
+    thread_list = []
+
+    for t in queue_list:
+        thread = Thread(target=taquero, args=(t,), daemon=True)
+        thread_list.append(thread)
+        thread.start()
+
+    for thread in thread_list:
+        thread.join()
+
+    raw_data = {'Queues': ['Asada', 'Adobada', 'Otros'],
+                'Quantity': [asada_queue.qsize(), adobada_queue.qsize(), others_queue.qsize()]}
+    df = pd.DataFrame(raw_data, columns=['Queues', 'Quantity'])
+    print(df)
+    return df
 
 
 # Receives a DataFrame of at least two keys and two columns
@@ -201,4 +207,4 @@ def charts(df):
     plt.show()
 
 
-charts(df)
+charts(Throw_Threads(asada_queue, adobada_queue, others_queue))
