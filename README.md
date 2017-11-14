@@ -111,9 +111,9 @@ List of elements that are needed to be installed to run the code properly.
     <p>or</p>
     <pre>sudo pip3 install matplotlib</pre>
   </li>
-  If you are going to read a file from an SQS server from Amazon, you will need to download boto3.
   <li>
     <b>Boto3</b>
+    <p>If you are going to read a file from an SQS server from Amazon, you will need to download boto3.</p>
     <p>To install, using the terminal, try:</p>
     <pre>sudo apt-get install pip-boto3</pre>
     <p>or</p>
@@ -123,20 +123,20 @@ List of elements that are needed to be installed to run the code properly.
       <li>
         Create a hidden folder <pre>.aws</pre> in the home directory.
       </li>
-      <p>Inside the foler, add the next to files</p>
+      <p>Inside this foler, add the next files:</p>
       <li>
         credentials
         <pre>
-        [default]
-        aws_access_key_id = YOUR_ACCESS_KEY
-        aws_secret_access_key = YOUR_SECRET_KEY
+[default]
+aws_access_key_id = YOUR_ACCESS_KEY
+aws_secret_access_key = YOUR_SECRET_KEY
         </pre>
       </li>
       <li>
         config
         <pre>
-        [default]
-        region=us-east-1
+[default]
+region=us-east-1
         </pre>
       </li>
     </ul>
