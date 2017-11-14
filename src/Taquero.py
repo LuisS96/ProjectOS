@@ -32,12 +32,12 @@ def starting_tortillas(starting_amount): #define the starting amount of tortilla
     
 def produce_tortillas(time_to_produce,tacos_queue): #define the time the tortillera needs to produce a single tortilla
     global tortillera_tortillas
-    if tortillera_tortillas >= 50: #if there's more than 50 tortillas, keep producing tortillas and let the taquero take some
+    if tortillera_tortillas >= 500: #if there's more than 50 tortillas, keep producing tortillas and let the taquero take some
         with lock:
             tortillera_tortillas += 1 #add 1 tortilla to the total, wasting a define interval of time
         
     else:
-        while tortillera_tortillas < 50: #if there's less than 50 tortillas, make up to 50 tortillas and dont let the taquero take any
+        while tortillera_tortillas < 500: #if there's less than 50 tortillas, make up to 50 tortillas and dont let the taquero take any
             with lock:
                 tortillera_tortillas += 1
             time.sleep(time_to_produce)
@@ -47,9 +47,9 @@ def produce_tortillas(time_to_produce,tacos_queue): #define the time the tortill
 
 def grab_tortillas(interval): #refull the taquero's tortillas with the tortillas made from the tortilera
     global tortillera_tortillas
-    if tortillera_tortillas > 50:
+    if tortillera_tortillas > 500:
         with lock:
-            tortillera_tortillas -= 50
+            tortillera_tortillas -= 500
             
     else:
         time.sleep(interval)
@@ -106,12 +106,13 @@ def taquero(tacos_queue, order_list):
     starting_tortillas(500) #define starting quantities for every ingredient
     produce_tortillas(.01,tacos_queue)
     cycle = 2
-    guacamole = 10
-    salsa = 10
-    cebolla = 10
-    cilantro = 10
-    frijol = 10
-    tortillas = 10
+    guacamole = 500
+    salsa = 500
+    cebolla = 500
+    cilantro = 500
+    frijol = 500
+    grab_tortillas(0.5)
+    tortillas = 500
     wait_queue = Queue()
     current = tacos_queue.get()
     while tacos_queue.empty() is False:
