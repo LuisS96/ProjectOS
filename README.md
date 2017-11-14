@@ -111,8 +111,37 @@ List of elements that are needed to be installed to run the code properly.
     <p>or</p>
     <pre>sudo pip3 install matplotlib</pre>
   </li>
+  If you are going to read a file from an SQS server from Amazon, you will need to download boto3.
+  <li>
+    <b>Boto3</b>
+    <p>To install, using the terminal, try:</p>
+    <pre>sudo apt-get install pip-boto3</pre>
+    <p>or</p>
+    <pre>sudo pip install boto3</pre>
+    <p>The following folder and files are needed:</p>
+    <ul>
+      <li>
+        Create a hidden folder <pre>.aws</pre> in the home directory.
+      </li>
+      <p>Inside the foler, add the next to files</p>
+      <li>
+        credentials
+        <pre>
+        [default]
+        aws_access_key_id = YOUR_ACCESS_KEY
+        aws_secret_access_key = YOUR_SECRET_KEY
+        </pre>
+      </li>
+      <li>
+        config
+        <pre>
+        [default]
+        region=us-east-1
+        </pre>
+      </li>
+    </ul>
+  </li>
 </ul>
-  
 <div id="installation">
   <h2><a href="#TOC"></a>
   3. Installation
@@ -121,7 +150,17 @@ List of elements that are needed to be installed to run the code properly.
 <p>
 The software is designed to be installed locally (Linux). For the moment there is no version for mac OS or Windows.
 </p>
-
+To run the programm follow the next instructions:
+<ol>
+  <li>
+    Download the folder <a href="https://github.com/LuisS96/ProjectOS/tree/master/src">src</a>.
+  </li>
+  <li>
+    Make sure you have all to date and run the file <a href="https://github.com/LuisS96/ProjectOS/blob/master/src/TacosMain.py">TacosMain.py</a>.
+  </li>
+</ol>
+<p>
+  If any change is needed to be made you can do so in the documents that are inside the folder <a href="https://github.com/LuisS96/ProjectOS/tree/master/src">src</a>, linked to the main file 'TacosMain.py'.
 <div id="contributors">
   <h2><a href="#TOC"></a>
   4. Contributors
