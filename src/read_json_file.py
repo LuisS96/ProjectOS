@@ -2,12 +2,12 @@ import json
 import os
 
 def readSQS():
-	response = sqs.receive_message(QueueUrl = 'https://sqs.us-east-1.amazonaws.com/292274580527/cc406_team1')
-        received = []
-        for message in response['Messages']:
-        	received.append(message['ReceiptHandle'])
-                print(message['Body'])
-		return message
+    response = sqs.receive_message(QueueUrl = 'https://sqs.us-east-1.amazonaws.com/292274580527/cc406_team1')
+    received = []
+    for message in response['Messages']:
+      	received.append(message['ReceiptHandle'])
+        print(message['Body'])
+	return message
 	
 def read_order(file):
     # Assures that the file exists and is located in the same directory
