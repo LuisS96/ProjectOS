@@ -11,8 +11,8 @@ def readSQS():
         received = []
         for message in response['Messages']:
             received.append(message['ReceiptHandle'])
-            print(message['Body'])
-            return message
+            data = json.loads(message['Body'])
+            return data
         WaitTimeSeconds = 20
 
 
