@@ -61,6 +61,9 @@
     </li>
     <ul>
       <li>
+        <a href="#python">Python3.6</a>
+      </li>
+      <li>
         <a href="#pandas">Pandas3</a>
       </li>
       <li>
@@ -100,7 +103,10 @@ List of elements that are needed to be installed to run the code properly.
 </p>
 <ul>
   <li>
-    <b>Python3.6 or newest version.</b>
+    <div id="python">
+      <a href="#TOC"></a>
+      <b>Python3.6 or newest version.</b>
+    </div>
     <p>
     The following instructions on how to install Python are in the next <a href="http://docs.python-guide.org/en/latest/starting/install3/linux/">link</a>.
     </p>
@@ -119,14 +125,20 @@ List of elements that are needed to be installed to run the code properly.
     </p>
   </li>
   <li>
-    <b>Matplotlib</b>
+    <div id="matplotlib">
+      <a href="#TOC"></a>
+      <b>Matplotlib</b>
+    </div>
     <p>To install, using the terminal, try:</p>
     <pre>sudo apt-get install python3-matplotlib</pre>
     <p>or</p>
     <pre>sudo pip3 install matplotlib</pre>
   </li>
   <li>
-    <b>Boto3</b>
+    <div id="boto">
+      <a href="#TOC"></a>
+      <b>Boto3</b>
+    </div>
     <p>If you are going to read a file from an SQS server from Amazon, you will need to download boto3.</p>
     <p>To install, using the terminal, try:</p>
     <pre>sudo apt-get install pip-boto3</pre>
