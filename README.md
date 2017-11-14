@@ -117,7 +117,7 @@ List of elements that are needed to be installed to run the code properly.
     <p>To install, using the terminal, try:</p>
     <pre>sudo apt-get install pip-boto3</pre>
     <p>or</p>
-    <pre>sudo pip install boto3</pre>
+    <pre>sudo pip3 install boto3</pre>
     <p>The following folder and files are needed:</p>
     <ul>
       <li>
