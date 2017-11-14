@@ -12,7 +12,7 @@ def charts(df,order_list):
     # Table
     orders = []
     for order in order_list:
-        orders.append([order.Id1,(order.endTime - order.startTime).total_seconds()])
+        orders.append([order.Id,(order.endTime - order.startTime).total_seconds()])
     # for time in df['Time of completion']:
     #     orders.append([time])
     columns = ["Order",'Time of completion']
