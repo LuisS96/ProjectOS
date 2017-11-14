@@ -5,10 +5,10 @@ import boto3
 
 def readSQS():
     sqs = boto3.client("sqs")
+    received = []
     while True:
         MaxNumberOfMessages = 10
         response = sqs.receive_message(QueueUrl='https://sqs.us-east-1.amazonaws.com/292274580527/cc406_team1')
-        received = []
         for message in response['Messages']:
             received.append(message['ReceiptHandle'])
             data = json.loads(message['Body'])
