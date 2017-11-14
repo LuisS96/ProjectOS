@@ -5,8 +5,11 @@ from Taquero import *
 from Threads import *
 
 #Read file
-file = "Order.json"
-order = read_order(file)
+#file = "Order.json"
+#order = read_order(file)
+
+#Read SQS Message
+order = readSQS()
 
 #Insert each order in queues according to type of meat to be used by a taquero
 queue,order_list = queues(order) #order_list = list of orders used to know when an order is completed
