@@ -2,12 +2,13 @@ import json
 import os
 
 def readSQS():
-	response = sqs.receive_message(QueueUrl = 'https://sqs.us-east-1.amazonaws.com/292274580527/cc406_team1',)
+	response = sqs.receive_message(QueueUrl = 'https://sqs.us-east-1.amazonaws.com/292274580527/cc406_team1')
         received = []
         for message in response['Messages']:
         	received.append(message['ReceiptHandle'])
                 print(message['Body'])
 		return message
+	
 def read_order(file):
     # Assures that the file exists and is located in the same directory
     if os.path.isfile(file) == False:
@@ -22,6 +23,6 @@ def read_order(file):
                     data = json.load(jsfl)
                 return data
             except:
-                print("Make sure your json file is correctly written")
+                print("Make sure your json file is written correctly")
         else:
-            print('File type is not .json and cannot be readen')
+            print('File type is not .json and cannot be read')
