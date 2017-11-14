@@ -121,7 +121,8 @@ List of elements that are needed to be installed to run the code properly.
     <p>The following folder and files are needed:</p>
     <ul>
       <li>
-        Create a hidden folder <pre>.aws</pre> in the home directory.
+        Create a hidden folder in the home directory called:
+        <pre>.aws</pre>
       </li>
       <p>Inside this foler, add the next files:</p>
       <li>
