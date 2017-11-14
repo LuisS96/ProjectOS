@@ -59,6 +59,17 @@
     <li>
       <a href="#prerequisites">Prerequisites</a>
     </li>
+    <ul>
+      <li>
+        <a href="#pandas">Pandas3</a>
+      </li>
+      <li>
+        <a href="#matplotlib">Matplotlib</a>
+      </li>
+      <li>
+        <a href="#boto">Boto3</a>
+      </li>
+    </ul>
     <li>
       <a href="#installation">Installation</a>
     </li>
@@ -95,7 +106,10 @@ List of elements that are needed to be installed to run the code properly.
     </p>
   </li>
   <li>
-    <b>Pandas3</b>
+    <div id="pandas">
+      <a href="#TOC"></a>
+      <b>Pandas3</b>
+    </div>
     <p>To install, using the terminal, try:</p>
     <pre>sudo apt-get install python3-pandas</pre>
     <p>or</p>
