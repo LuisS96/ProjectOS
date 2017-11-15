@@ -2,9 +2,10 @@ from datetime import datetime
 
 # Class order is created as a parameter for each order received.
 class orden():
-    def __init__(self, startTime, Id):
+    def __init__(self, Id):
         self.Id = Id  # string
-        self.startTime = datetime.strptime(startTime, "%Y-%m-%d %H:%M:%S") # datetime
+        # self.startTime = datetime.strptime(startTime, "%Y-%m-%d %H:%M:%S") # datetime
+        self.startTime = datetime.now()
         self.endTime = None #end time
         self.list_subs = []  # List of suborders to check if completed
     def __str__(self):
