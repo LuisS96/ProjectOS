@@ -4,7 +4,7 @@ from datetime import datetime
 class orden():
     def __init__(self, startTime, Id):
         self.Id = Id  # string
-        self.startTime = startTime # datetime
+        self.startTime = datetime.strptime(startTime, "%Y-%m-%d %H:%M:%S") # datetime
         self.endTime = None #end time
         self.list_subs = []  # List of suborders to check if completed
     def __str__(self):
