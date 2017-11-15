@@ -6,14 +6,12 @@ import boto3
 def readSQS():
     sqs = boto3.client("sqs")
     received = []
-    response = sqs.receive_message(QueueUrl='https://sqs.us-east-1.amazonaws.com/292274580527/cc406_team1', MaxNumberOfMessages=10, WaitTimeSeconds=20)
     while True:
+        response = sqs.receive_message(QueueUrl='https://sqs.us-east-1.amazonaws.com/292274580527/cc406_team1', MaxNumberOfMessages=10, WaitTimeSeconds=20)
         for message in response['Messages']:
             received.append(message['ReceiptHandle'])
             data = json.loads(message['Body'])
-            return data
-        response = sqs.receive_message(QueueUrl='https://sqs.us-east-1.amazonaws.com/292274580527/cc406_team1', MaxNumberOfMessages=10, WaitTimeSeconds=20)
-
+            print(data)
 
 def read_order(file):
     # Assures that the file exists and is located in the same directory
