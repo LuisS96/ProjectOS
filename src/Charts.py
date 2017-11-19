@@ -1,8 +1,8 @@
 import matplotlib.pyplot as plt
 
-#Receives a DataFrame of at least two keys and two columns
-#In our case, our pie is determined with our column 'Time of completion'
-#Pie chart and bar chart
+# Receives a DataFrame of at least two keys and two columns
+# In our case, our pie is determined with our column 'Time of completion'
+# Pie chart and bar chart
 def charts(df,order_list):
     plt.style.use("dark_background")
     colors = ["cornflowerblue", "orangered", "gold","r","limegreen","m","b","coral","yellow"]

@@ -16,7 +16,7 @@ class Order:
         return 'datetime: {0} \nrequest_id: {1} \nOrder: {2}'.format(self.startTime, self.Id, self.subordersList)
 
     def __iter__(self):
-        for suborder in subordersList:
+        for suborder in self.subordersList:
             return suborder
 
 
