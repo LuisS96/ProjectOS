@@ -25,18 +25,17 @@ def check_order(answersList, currentTaco, stepsList):
                     answer.endTime = datetime.now()
                     answer.steps = stepsList.copy()
                     stepsList.clear()
-                    print('answer')
 
 
 def Switch(waitQueue, currentTaco, nextTaco, countSteps, stepsList):
     currentTaco.waitCycle += 1
     waitQueue.put(currentTaco)
     countSteps += 1
-    step = Steps(countSteps, "Pause", "Switching suborder", currentTaco.Id)
+    step = Steps(countSteps, "Pause", "Pausing suborder", currentTaco.Id)
     stepsList.append(step)
     currentTaco = nextTaco
     countSteps += 1
-    step = Steps(countSteps, "Resume", "Suborder switched", currentTaco.Id)
+    step = Steps(countSteps, "Resume", "Continuing suborder", currentTaco.Id)
     stepsList.append(step)
     nextTaco = waitQueue.get()
     return currentTaco, nextTaco, countSteps

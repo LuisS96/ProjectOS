@@ -20,11 +20,8 @@ def assign_queues(queues, answersList):
             else:
                 othersQueue.put(suborder)
     queues.append(asadaQueue)
-    print(asadaQueue.qsize())
     queues.append(adobadaQueue)
-    print(adobadaQueue.qsize())
     queues.append(othersQueue)
-    print(othersQueue.qsize())
 
 
 def classify_data(data, answersList):
@@ -37,7 +34,6 @@ def classify_data(data, answersList):
         order.subordersList.append(taco)
     answer = Answer(order)
     answersList.append(answer)
-    print(len(answersList))
 
 
 class ComplexEncoder(json.JSONEncoder):
@@ -63,8 +59,6 @@ def readSQS():
         assign_queues(queues, answersList)
         threads(queues, answersList)
         for answer in answersList:
-            print(len(answersList))
             print(json.dumps(answer.__dict__(), indent=4))
-        # print(json.dumps(answer))
 
 readSQS()

@@ -16,6 +16,7 @@ class Order:
         return self
 
     def get_suborders(self):
+        self.suborders.clear()
         for suborder in self.subordersList:
             self.suborders.append(suborder.__dict__())
         return self.suborders
@@ -49,6 +50,7 @@ class Answer:
         self.steps = []  # List of steps that an order gets to be completed
 
     def get_steps(self):
+        self.stepsList.clear()
         for step in self.steps:
             self.stepsList.append(step.__dict__())
         return self.stepsList
