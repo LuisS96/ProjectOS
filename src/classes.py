@@ -4,6 +4,8 @@ from datetime import datetime
 
 
 class Order:
+    suborders = []
+
     def __init__(self, Id, startTime):
         self.Id = Id  # String received from the SQS message
         self.startTime = datetime.strptime(startTime, "%Y-%m-%d %H:%M:%S")  # datetime received from the SQS message
@@ -12,12 +14,16 @@ class Order:
         self.completed = False  # when completed, will changed to True
         self.totalSubs = 0  # Amount of suborders in order.
 
-    def __str__(self):
-        return 'datetime: {0} \nrequest_id: {1} \nOrder: {2}'.format(self.startTime, self.Id, self.subordersList)
-
     def __iter__(self):
+        return self
+
+    def get_suborders(self):
         for suborder in self.subordersList:
-            return suborder
+            self.suborders.append(str(suborder))
+        return self.suborders
+
+    def __str__(self):
+        return 'datetime: {0}, request_id: {1}, Order: {2}'.format(self.startTime, self.Id, self.get_suborders())
 
 
 class Suborder:
@@ -34,18 +40,25 @@ class Suborder:
         self.completed = False  # When completed, will change to True
 
     def __str__(self):
-        return 'ID: {0} \nType: {1} \nMeat: {2} \nQuantity: {3} \nIngredients: {4} \nTo go: {5}'.format(self.Id, self.Type, self.meat, self.qty, self.ingr, self.to_go)
+        return 'ID: {0}, Type: {1}, Meat: {2}, Quantity: {3}, Ingredients: {4}, To go: {5}'.format(self.Id, self.Type, self.meat, self.qty, self.ingr, self.to_go)
 
 
 class Answer:
+    stepsList = []
+
     def __init__(self, order):
-        # self.startTime = datetime.now()
+        self.startTime = datetime.now()
         self.order = order
-        # self.endTime = datetime.now()
+        self.endTime = datetime.now()
         self.steps = []  # List of steps that an order gets to be completed
 
+    def get_steps(self):
+        for step in self.steps:
+            self.stepsList.append(str(step))
+        return self.stepsList
+
     def __str__(self):
-        return '{0} \nanswer: {\nstart_time: {1} \nend_time{2} \nsteps: {3}}'.format(self.order, self.order.startTIme, self.order.endTime, self.steps)
+        return '{0}, answer: start_time: {1}, end_time: {2}, steps: {3}'.format(self.order.__str__(), self.startTime, self.endTime, self.get_steps())
 
 
 class Steps:
@@ -58,4 +71,4 @@ class Steps:
         self.endTime = datetime.now()
 
     def __str__(self):
-        return 'Step: {0} \nState: {1} \nAction: {2} \nID: {3} \nStartTime: {4} \nEndTime: {5}'.format(self.step, self.state, self.action, self.Id, self.startTime, self.endTime)
+        return 'Step: {0}, State: {1}, Action: {2}, ID: {3}, StartTime: {4}, EndTime: {5}'.format(self.step, self.state, self.action, self.Id, self.startTime, self.endTime)

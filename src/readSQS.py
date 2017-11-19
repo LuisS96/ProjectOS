@@ -41,7 +41,7 @@ def readSQS():
     sqs = boto3.client('sqs')
     received = []
     while True:
-        response = sqs.receive_message(QueueUrl='https://sqs.us-east-1.amazonaws.com/292274580527/cc406_team5', MaxNumberOfMessages=10, WaitTimeSeconds=20)
+        response = sqs.receive_message(QueueUrl='https://sqs.us-east-1.amazonaws.com/292274580527/cc406_team6', MaxNumberOfMessages=10, WaitTimeSeconds=20)
         answersList = []
         queues = []
         for message in response['Messages']:
@@ -50,6 +50,7 @@ def readSQS():
             print(data)
             classify_data(data, answersList)
         assign_queues(queues, answersList)
-        threads(queues, answersList)
+        answer = json.loads(threads(queues, answersList))
+        print(answer)
 
 readSQS()

@@ -9,7 +9,7 @@ lock = Lock()
 
 
 # Checks order for completion by checking current ID
-def check_order(answersList, currentTaco, countSteps, stepsList):
+def check_order(answersList, currentTaco, stepsList):
     for answer in answersList:
         size = 0
         for suborder in answer.order.subordersList:
@@ -21,12 +21,13 @@ def check_order(answersList, currentTaco, countSteps, stepsList):
                 if size == answer.order.totalSubs and answer.order.completed is False:
                     answer.order.completed = True
                     answer.order.endTime = datetime.now()
-                    step = Steps(countSteps, "Completed", "Order finished", currentTaco.Id)
-                    stepsList.append(step)
-                    print(step)
+                    answer.startTime = answer.order.startTime
+                    answer.endTime = datetime.now()
+                    # print(step)
                     # print('ID: ', order.Id, '\tStatus: Order Finished')
-                    answer.steps == stepsList
+                    answer.steps = stepsList.copy()
                     stepsList.clear()
+                    print('answer')
 
 
 def Switch(waitQueue, currentTaco, nextTaco, countSteps, stepsList):
@@ -35,14 +36,14 @@ def Switch(waitQueue, currentTaco, nextTaco, countSteps, stepsList):
     countSteps += 1
     step = Steps(countSteps, "Pause", "Entered wait queue", currentTaco.Id)
     stepsList.append(step)
-    print(step)
+    # print(step)
     # print('ID: ', currentTaco.Id, '\tStatus: Pause...', )
     currentTaco = nextTaco
     # print('ID: ', currentTaco.Id, '\tStatus: Resume...', )
     countSteps += 1
     step = Steps(countSteps, "Resume", "Left wait queue", currentTaco.Id)
     stepsList.append(step)
-    print(step)
+    # print(step)
     nextTaco = waitQueue.get()
     return currentTaco, nextTaco, countSteps
 
@@ -78,9 +79,9 @@ def grab_tortillas(interval):  # refull the taquero's tortillas with the tortill
         grab_tortillas(interval)
 
 
-def create_taco(countSteps, tacos, currentTaco, stepsList, tortillas, guacamole, cilantro, cebolla, frijol, salsa, madeTacos):
-    while currentTaco.qty > 0: #check if the order still has due tacos to avoid making extra iterations
-        if tortillas == 0: #refill an ingredient when their qty is 0
+def create_taco(countSteps, tacos, currentTaco, suborderTacos, stepsList, tortillas, guacamole, cilantro, cebolla, frijol, salsa, madeTacos):
+    while suborderTacos > 0: # check if the order still has due tacos to avoid making extra iterations
+        if tortillas == 0: # refill an ingredient when their qty is 0
             countSteps += 1
             step = Steps(countSteps, "Pause", "Refilling tortillas", currentTaco.Id)
             # print('ID: ', current.Id, '\tStatus: Pause...', "refilling tortillas", )
@@ -88,11 +89,11 @@ def create_taco(countSteps, tacos, currentTaco, stepsList, tortillas, guacamole,
             tortillas = 50
             step.endTime = datetime.now()
             stepsList.append(step)
-            print(step)
+            # print(step)
             countSteps += 1
             step = Steps(countSteps, "Resume", "Continuing suborder", currentTaco.Id)
             stepsList.append(step)
-            print(step)
+            # print(step)
             # print('ID: ', current.Id, '\tStatus: Resume...', )
         if cilantro == 0:
             countSteps += 1
@@ -102,11 +103,11 @@ def create_taco(countSteps, tacos, currentTaco, stepsList, tortillas, guacamole,
             time.sleep(0.5)
             step.endTime = datetime.now()
             stepsList.append(step)
-            print(step)
+            # print(step)
             countSteps += 1
             step = Steps(countSteps, "Resume", "Continuing suborder", currentTaco.Id)
             stepsList.append(step)
-            print(step)
+            # print(step)
             # print('ID: ', current.Id, '\tStatus: Resume...', )
         if cebolla == 0:
             countSteps += 1
@@ -116,11 +117,11 @@ def create_taco(countSteps, tacos, currentTaco, stepsList, tortillas, guacamole,
             time.sleep(0.5)
             step.endTime = datetime.now()
             stepsList.append(step)
-            print(step)
+            # print(step)
             countSteps += 1
             step = Steps(countSteps, "Resume", "Continuing suborder", currentTaco.Id)
             stepsList.append(step)
-            print(step)
+            # print(step)
             # print('ID: ', current.Id, '\tStatus: Resume...', )
         if guacamole == 0:
             countSteps += 1
@@ -130,11 +131,11 @@ def create_taco(countSteps, tacos, currentTaco, stepsList, tortillas, guacamole,
             time.sleep(0.5)
             step.endTime = datetime.now()
             stepsList.append(step)
-            print(step)
+            # print(step)
             countSteps += 1
             step = Steps(countSteps, "Resume", "Continuing suborder", currentTaco.Id)
             stepsList.append(step)
-            print(step)
+            # print(step)
             # print('ID: ', current.Id, '\tStatus: Resume...', )
         if salsa == 0:
             countSteps += 1
@@ -144,13 +145,13 @@ def create_taco(countSteps, tacos, currentTaco, stepsList, tortillas, guacamole,
             time.sleep(0.5)
             step.endTime = datetime.now()
             stepsList.append(step)
-            print(step)
+            # print(step)
             countSteps += 1
             step = Steps(countSteps, "Resume", "Continuing suborder", currentTaco.Id, currentTaco.startTime)
             stepsList.append(step)
-            print(step)
+            # print(step)
             # print('ID: ', current.Id, '\tStatus: Resume...', )
-        tortillas -= 1 #substract the ingredients used in the taco
+        tortillas -= 1 # substract the ingredients used in the taco
         if "Cebolla" in currentTaco.ingr:
             cebolla -= 1
         if "Guacamole" in currentTaco.ingr:
@@ -161,14 +162,14 @@ def create_taco(countSteps, tacos, currentTaco, stepsList, tortillas, guacamole,
             frijol -= 1
         if "Cilantro" in currentTaco.ingr:
             cilantro -= 1
-        time.sleep(.1) #it takes the taquero 0.1 seconds to make a taco
-        madeTacos += 1 #count of tacos made
-        currentTaco.qty -= 1 #substract 1 taco from the order
+        time.sleep(.1) # it takes the taquero 0.1 seconds to make a taco
+        madeTacos += 1 # count of tacos made
+        suborderTacos -= 1 # substract 1 taco from the order
         if madeTacos < tacos:
-            create_taco(countSteps, tacos, currentTaco, stepsList, tortillas, guacamole, cilantro, cebolla, frijol, salsa, madeTacos)
+            create_taco(countSteps, tacos, currentTaco, suborderTacos, stepsList, tortillas, guacamole, cilantro, cebolla, frijol, salsa, madeTacos)
         else:
             break
-    return guacamole, cilantro, salsa, cebolla, frijol, tortillas
+    return guacamole, cilantro, salsa, cebolla, frijol, tortillas, suborderTacos
 
 
 def taquero(queue, answersList):  # Each "taquero" represents a thread
@@ -184,63 +185,66 @@ def taquero(queue, answersList):  # Each "taquero" represents a thread
     countSteps = 1
     if not queue.empty():
         currentTaco = queue.get()
+        suborderTacos = currentTaco.qty
         currentTaco.startTime = datetime.now()
         step = Steps(countSteps, "Running", "Starting your suborder", currentTaco.Id)
-        print(step)
+        # print(step)
         stepsList.append(step)
         while not queue.empty():
             nextTaco = queue.get()
-            time.sleep(1)
-            guacamole, cilantro, salsa, cebolla, frijol, tortillas = create_taco(countSteps, tacos, currentTaco, stepsList, tortillas, guacamole,
+            guacamole, cilantro, salsa, cebolla, frijol, tortillas, suborderTacos = create_taco(countSteps, tacos, currentTaco, suborderTacos, stepsList, tortillas, guacamole,
                                                                                  cilantro, cebolla, frijol, salsa, 0)
-            if currentTaco.qty == 1:
-                guacamole, cilantro, salsa, cebolla, frijol, tortillas = create_taco(countSteps, 1, currentTaco, stepsList, tortillas, guacamole,
+            if suborderTacos == 1:
+                guacamole, cilantro, salsa, cebolla, frijol, tortillas, suborderTacos = create_taco(countSteps, 1, currentTaco, suborderTacos, stepsList, tortillas, guacamole,
                                                                                      cilantro, cebolla, frijol, salsa, 0)
             # While for switch
-            while currentTaco.qty > 0:
+            while suborderTacos > 0:
                 currentTaco, nextTaco, countSteps = Switch(waitQueue, currentTaco, nextTaco, countSteps, stepsList)
                 # Bonus cycles for huge orders
                 if currentTaco.waitCycle >= 8:
-                    guacamole, cilantro, salsa, cebolla, frijol, tortillas = create_taco(countSteps, tacos * 4, currentTaco, stepsList, tortillas,
+                    guacamole, cilantro, salsa, cebolla, frijol, tortillas, suborderTacos = create_taco(countSteps, tacos * 4, currentTaco, suborderTacos, stepsList, tortillas,
                                                                                        guacamole, cilantro, cebolla,
                                                                                        frijol, salsa, 0)
                 # Bonus cycles for big orders
                 elif currentTaco.waitCycle >= 6:
-                    guacamole, cilantro, salsa, cebolla, frijol, tortillas = create_taco(countSteps, tacos * 3, currentTaco, stepsList, tortillas,
+                    guacamole, cilantro, salsa, cebolla, frijol, tortillas, suborderTacos = create_taco(countSteps, tacos * 3, currentTaco, suborderTacos, stepsList, tortillas,
                                                                                        guacamole, cilantro, cebolla,
                                                                                        frijol, salsa, 0)
 
                 # Bonus cycles for medium orders
                 elif currentTaco.waitCycle >= 2:
-                    guacamole, cilantro, salsa, cebolla, frijol, tortillas = create_taco(countSteps, tacos * 2, currentTaco, stepsList, tortillas,
+                    guacamole, cilantro, salsa, cebolla, frijol, tortillas, suborderTacos = create_taco(countSteps, tacos * 2, currentTaco, suborderTacos, stepsList, tortillas,
                                                                                        guacamole, cilantro, cebolla,
                                                                                        frijol, salsa, 0)
 
                 # Small orders do not have bonus cycles
                 else:
-                    guacamole, cilantro, salsa, cebolla, frijol, tortillas = create_taco(countSteps, tacos, currentTaco, stepsList, tortillas,
+                    guacamole, cilantro, salsa, cebolla, frijol, tortillas, suborderTacos = create_taco(countSteps, tacos, currentTaco, suborderTacos, stepsList, tortillas,
                                                                                        guacamole, cilantro, cebolla,
                                                                                        frijol, salsa, 0)
 
-                if currentTaco.qty == 1:
-                    guacamole, cilantro, salsa, cebolla, frijol, tortillas = create_taco(countSteps, 1, currentTaco, stepsList, tortillas,
+                if suborderTacos == 1:
+                    guacamole, cilantro, salsa, cebolla, frijol, tortillas, suborderTacos = create_taco(countSteps, 1, currentTaco, suborderTacos, stepsList, tortillas,
                                                                                        guacamole, cilantro, cebolla,
                                                                                        frijol, salsa, 0)
             step = Steps(countSteps, "Completed", "Suborder finished", currentTaco.Id)
             stepsList.append(step)
-            print(step)
-            check_order(answersList, currentTaco, countSteps, stepsList)
+            # print(step)
+            check_order(answersList, currentTaco, stepsList)
             currentTaco = nextTaco
+            countSteps = 1
+            suborderTacos = currentTaco.qty
             step = Steps(countSteps, "Running", "Starting your suborder", currentTaco.Id)
-            print(step)
+            # print(step)
             stepsList.append(step)
-        while currentTaco.qty > 0:
-            guacamole, cilantro, salsa, cebolla, frijol, tortillas = create_taco(countSteps, tacos, currentTaco, stepsList, tortillas,
+        while suborderTacos > 0:
+            guacamole, cilantro, salsa, cebolla, frijol, tortillas, suborderTacos = create_taco(countSteps, tacos, currentTaco, suborderTacos, stepsList, tortillas,
                                                                                  guacamole, cilantro, cebolla,
                                                                                  frijol, salsa, 0)
         step = Steps(countSteps, "Completed", "Suborder finished", currentTaco.Id)
         stepsList.append(step)
-        print(step)
-        check_order(answersList, currentTaco, countSteps,stepsList)
+        # print(step)
+        check_order(answersList, currentTaco, stepsList)
+        return '{0}'.format(answersList)
     else:
         pass
