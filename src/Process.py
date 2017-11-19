@@ -25,17 +25,18 @@ def check_order(answersList, currentTaco, stepsList):
                     answer.endTime = datetime.now()
                     answer.steps = stepsList.copy()
                     stepsList.clear()
+                    print('answer')
 
 
 def Switch(waitQueue, currentTaco, nextTaco, countSteps, stepsList):
     currentTaco.waitCycle += 1
     waitQueue.put(currentTaco)
     countSteps += 1
-    step = Steps(countSteps, "Pause", "Entered wait queue", currentTaco.Id)
+    step = Steps(countSteps, "Pause", "Switching suborder", currentTaco.Id)
     stepsList.append(step)
     currentTaco = nextTaco
     countSteps += 1
-    step = Steps(countSteps, "Resume", "Left wait queue", currentTaco.Id)
+    step = Steps(countSteps, "Resume", "Suborder switched", currentTaco.Id)
     stepsList.append(step)
     nextTaco = waitQueue.get()
     return currentTaco, nextTaco, countSteps
@@ -199,6 +200,7 @@ def taquero(queue, answersList):  # Each "taquero" represents a thread
                     guacamole, cilantro, salsa, cebolla, frijol, tortillas, suborderTacos = create_taco(countSteps, 1, currentTaco, suborderTacos, stepsList, tortillas,
                                                                                        guacamole, cilantro, cebolla,
                                                                                        frijol, salsa, 0)
+            countSteps += 1
             step = Steps(countSteps, "Completed", "Suborder finished", currentTaco.Id)
             stepsList.append(step)
             check_order(answersList, currentTaco, stepsList)
@@ -211,6 +213,8 @@ def taquero(queue, answersList):  # Each "taquero" represents a thread
             guacamole, cilantro, salsa, cebolla, frijol, tortillas, suborderTacos = create_taco(countSteps, tacos, currentTaco, suborderTacos, stepsList, tortillas,
                                                                                  guacamole, cilantro, cebolla,
                                                                                  frijol, salsa, 0)
+
+        countSteps += 1
         step = Steps(countSteps, "Completed", "Suborder finished", currentTaco.Id)
         stepsList.append(step)
         check_order(answersList, currentTaco, stepsList)

@@ -1,5 +1,3 @@
-__author__ = 'lfsc96'
-
 from datetime import datetime
 
 
@@ -57,7 +55,8 @@ class Answer:
 
     def __dict__(self):
         suborders = self.order.get_suborders()
-        answer = {'datetime': self.order.startTime, 'request_id': self.order.Id, 'order': suborders, 'answer': {'start_time': self.startTime, 'end_time': self.endTime, 'steps': self.get_steps()}}
+        answer = {'datetime': str(self.order.startTime), 'request_id': self.order.Id, 'order': suborders,
+                  'answer': {'start_time': str(self.startTime), 'end_time': str(self.endTime), 'steps': self.get_steps()}}
         return answer
 
     def __iter__(self):
@@ -74,5 +73,5 @@ class Steps:
         self.endTime = datetime.now()
 
     def __dict__(self):
-        step = {'Step': self.step, 'State': self.state, 'Action': self.action, 'StartTime': self.startTime, 'EndTime': self.endTime}
+        step = {'Step': self.step, 'State': self.state, 'Action': self.action, 'part_id': self.Id,'StartTime': str(self.startTime), 'EndTime': str(self.endTime)}
         return step

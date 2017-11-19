@@ -4,7 +4,7 @@ import json
 import boto3
 from queue import *
 from Threads import *
-# from Charts import *
+from Charts import *
 
 
 def assign_queues(queues, answersList):
@@ -20,8 +20,11 @@ def assign_queues(queues, answersList):
             else:
                 othersQueue.put(suborder)
     queues.append(asadaQueue)
+    print(asadaQueue.qsize())
     queues.append(adobadaQueue)
+    print(adobadaQueue.qsize())
     queues.append(othersQueue)
+    print(othersQueue.qsize())
 
 
 def classify_data(data, answersList):
@@ -34,6 +37,15 @@ def classify_data(data, answersList):
         order.subordersList.append(taco)
     answer = Answer(order)
     answersList.append(answer)
+    print(len(answersList))
+
+
+class ComplexEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, complex):
+            return [obj.real, obj.imag]
+            # Let the base class default method raise the TypeError
+        return json.JSONEncoder.default(self, obj)
 
 
 def readSQS():
@@ -50,9 +62,9 @@ def readSQS():
             classify_data(data, answersList)
         assign_queues(queues, answersList)
         threads(queues, answersList)
-        for answers in answersList:
-            print(answers.__dict__())
-            # print(json.dumps(answers))
+        for answer in answersList:
+            print(len(answersList))
+            print(json.dumps(answer.__dict__(), indent=4))
         # print(json.dumps(answer))
 
 readSQS()
