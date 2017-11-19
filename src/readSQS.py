@@ -19,7 +19,6 @@ def assign_queues(queues, answersList):
                 adobadaQueue.put(suborder)
             else:
                 othersQueue.put(suborder)
-    # queues = [asadaQueue, adobadaQueue, othersQueue]
     queues.append(asadaQueue)
     queues.append(adobadaQueue)
     queues.append(othersQueue)
@@ -50,7 +49,10 @@ def readSQS():
             print(data)
             classify_data(data, answersList)
         assign_queues(queues, answersList)
-        answer = json.loads(threads(queues, answersList))
-        print(answer)
+        threads(queues, answersList)
+        for answers in answersList:
+            print(answers.__dict__())
+            # print(json.dumps(answers))
+        # print(json.dumps(answer))
 
 readSQS()

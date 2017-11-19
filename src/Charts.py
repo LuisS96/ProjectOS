@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 def charts(df,order_list):
     plt.style.use("dark_background")
     colors = ["cornflowerblue", "orangered", "gold","r","limegreen","m","b","coral","yellow"]
-    fig, axes = plt.subplots(ncols = 3,figsize=(15,10))
+    fig, axes = plt.subplots(ncols=3, figsize=(15,10))
     ax1,ax2,ax3 = axes.ravel()
 
     # Table

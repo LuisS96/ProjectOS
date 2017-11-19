@@ -19,11 +19,8 @@ class Order:
 
     def get_suborders(self):
         for suborder in self.subordersList:
-            self.suborders.append(str(suborder))
+            self.suborders.append(suborder.__dict__())
         return self.suborders
-
-    def __str__(self):
-        return 'datetime: {0}, request_id: {1}, Order: {2}'.format(self.startTime, self.Id, self.get_suborders())
 
 
 class Suborder:
@@ -39,8 +36,9 @@ class Suborder:
         self.waitCycle = 0  # Time waiting to be processed, used as priority condition
         self.completed = False  # When completed, will change to True
 
-    def __str__(self):
-        return 'ID: {0}, Type: {1}, Meat: {2}, Quantity: {3}, Ingredients: {4}, To go: {5}'.format(self.Id, self.Type, self.meat, self.qty, self.ingr, self.to_go)
+    def __dict__(self):
+        suborder = {'ID': self.Id, 'Type': self.Type, 'Meat': self.meat, 'Quantity': self.qty, 'Ingredients': self.ingr, 'To_go': self.to_go}
+        return suborder
 
 
 class Answer:
@@ -54,11 +52,16 @@ class Answer:
 
     def get_steps(self):
         for step in self.steps:
-            self.stepsList.append(str(step))
+            self.stepsList.append(step.__dict__())
         return self.stepsList
 
-    def __str__(self):
-        return '{0}, answer: start_time: {1}, end_time: {2}, steps: {3}'.format(self.order.__str__(), self.startTime, self.endTime, self.get_steps())
+    def __dict__(self):
+        suborders = self.order.get_suborders()
+        answer = {'datetime': self.order.startTime, 'request_id': self.order.Id, 'order': suborders, 'answer': {'start_time': self.startTime, 'end_time': self.endTime, 'steps': self.get_steps()}}
+        return answer
+
+    def __iter__(self):
+        return self
 
 
 class Steps:
@@ -70,5 +73,6 @@ class Steps:
         self.startTime = datetime.now()
         self.endTime = datetime.now()
 
-    def __str__(self):
-        return 'Step: {0}, State: {1}, Action: {2}, ID: {3}, StartTime: {4}, EndTime: {5}'.format(self.step, self.state, self.action, self.Id, self.startTime, self.endTime)
+    def __dict__(self):
+        step = {'Step': self.step, 'State': self.state, 'Action': self.action, 'StartTime': self.startTime, 'EndTime': self.endTime}
+        return step

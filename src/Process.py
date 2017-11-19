@@ -23,11 +23,8 @@ def check_order(answersList, currentTaco, stepsList):
                     answer.order.endTime = datetime.now()
                     answer.startTime = answer.order.startTime
                     answer.endTime = datetime.now()
-                    # print(step)
-                    # print('ID: ', order.Id, '\tStatus: Order Finished')
                     answer.steps = stepsList.copy()
                     stepsList.clear()
-                    print('answer')
 
 
 def Switch(waitQueue, currentTaco, nextTaco, countSteps, stepsList):
@@ -36,14 +33,10 @@ def Switch(waitQueue, currentTaco, nextTaco, countSteps, stepsList):
     countSteps += 1
     step = Steps(countSteps, "Pause", "Entered wait queue", currentTaco.Id)
     stepsList.append(step)
-    # print(step)
-    # print('ID: ', currentTaco.Id, '\tStatus: Pause...', )
     currentTaco = nextTaco
-    # print('ID: ', currentTaco.Id, '\tStatus: Resume...', )
     countSteps += 1
     step = Steps(countSteps, "Resume", "Left wait queue", currentTaco.Id)
     stepsList.append(step)
-    # print(step)
     nextTaco = waitQueue.get()
     return currentTaco, nextTaco, countSteps
 
@@ -84,73 +77,53 @@ def create_taco(countSteps, tacos, currentTaco, suborderTacos, stepsList, tortil
         if tortillas == 0: # refill an ingredient when their qty is 0
             countSteps += 1
             step = Steps(countSteps, "Pause", "Refilling tortillas", currentTaco.Id)
-            # print('ID: ', current.Id, '\tStatus: Pause...', "refilling tortillas", )
             grab_tortillas(.5)
             tortillas = 50
             step.endTime = datetime.now()
             stepsList.append(step)
-            # print(step)
             countSteps += 1
             step = Steps(countSteps, "Resume", "Continuing suborder", currentTaco.Id)
             stepsList.append(step)
-            # print(step)
-            # print('ID: ', current.Id, '\tStatus: Resume...', )
         if cilantro == 0:
             countSteps += 1
             step = Steps(countSteps, "Pause", "Refilling cilantro", currentTaco.Id)
-            # print('ID: ', current.Id, '\tStatus: Pause...', "refilling cilantro", )
             cilantro = 500
             time.sleep(0.5)
             step.endTime = datetime.now()
             stepsList.append(step)
-            # print(step)
             countSteps += 1
             step = Steps(countSteps, "Resume", "Continuing suborder", currentTaco.Id)
             stepsList.append(step)
-            # print(step)
-            # print('ID: ', current.Id, '\tStatus: Resume...', )
         if cebolla == 0:
             countSteps += 1
             step = Steps(countSteps, "Pause", "Refilling cebolla", currentTaco.Id)
-            # print('ID: ', current.Id, '\tStatus: Pause...', "refilling cebolla", )
             cebolla = 500
             time.sleep(0.5)
             step.endTime = datetime.now()
             stepsList.append(step)
-            # print(step)
             countSteps += 1
             step = Steps(countSteps, "Resume", "Continuing suborder", currentTaco.Id)
             stepsList.append(step)
-            # print(step)
-            # print('ID: ', current.Id, '\tStatus: Resume...', )
         if guacamole == 0:
             countSteps += 1
             step = Steps(countSteps, "Pause", "Refilling guacamole", currentTaco.Id)
-            # print('ID: ', current.Id, '\tStatus: Pause...', "refilling guacamole", )
             guacamole = 500
             time.sleep(0.5)
             step.endTime = datetime.now()
             stepsList.append(step)
-            # print(step)
             countSteps += 1
             step = Steps(countSteps, "Resume", "Continuing suborder", currentTaco.Id)
             stepsList.append(step)
-            # print(step)
-            # print('ID: ', current.Id, '\tStatus: Resume...', )
         if salsa == 0:
             countSteps += 1
             step = Steps(countSteps, "Pause", "Refilling salsa", currentTaco.Id)
-            # print('ID: ', current.Id, '\tStatus: Pause...', "refilling salsa", )
             salsa = 500
             time.sleep(0.5)
             step.endTime = datetime.now()
             stepsList.append(step)
-            # print(step)
             countSteps += 1
             step = Steps(countSteps, "Resume", "Continuing suborder", currentTaco.Id, currentTaco.startTime)
             stepsList.append(step)
-            # print(step)
-            # print('ID: ', current.Id, '\tStatus: Resume...', )
         tortillas -= 1 # substract the ingredients used in the taco
         if "Cebolla" in currentTaco.ingr:
             cebolla -= 1
@@ -188,7 +161,6 @@ def taquero(queue, answersList):  # Each "taquero" represents a thread
         suborderTacos = currentTaco.qty
         currentTaco.startTime = datetime.now()
         step = Steps(countSteps, "Running", "Starting your suborder", currentTaco.Id)
-        # print(step)
         stepsList.append(step)
         while not queue.empty():
             nextTaco = queue.get()
@@ -229,13 +201,11 @@ def taquero(queue, answersList):  # Each "taquero" represents a thread
                                                                                        frijol, salsa, 0)
             step = Steps(countSteps, "Completed", "Suborder finished", currentTaco.Id)
             stepsList.append(step)
-            # print(step)
             check_order(answersList, currentTaco, stepsList)
             currentTaco = nextTaco
             countSteps = 1
             suborderTacos = currentTaco.qty
             step = Steps(countSteps, "Running", "Starting your suborder", currentTaco.Id)
-            # print(step)
             stepsList.append(step)
         while suborderTacos > 0:
             guacamole, cilantro, salsa, cebolla, frijol, tortillas, suborderTacos = create_taco(countSteps, tacos, currentTaco, suborderTacos, stepsList, tortillas,
@@ -243,8 +213,6 @@ def taquero(queue, answersList):  # Each "taquero" represents a thread
                                                                                  frijol, salsa, 0)
         step = Steps(countSteps, "Completed", "Suborder finished", currentTaco.Id)
         stepsList.append(step)
-        # print(step)
         check_order(answersList, currentTaco, stepsList)
-        return '{0}'.format(answersList)
     else:
         pass
