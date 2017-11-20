@@ -93,7 +93,7 @@ def create_taco(tacos, currentTaco, ingrQty, tortillas):
                 step = Steps("Resume", "Continuing suborder", currentTaco.Id)
                 currentTaco.steps.append(step)
             if ingredient != 'tortillas' and ingrQty[ingredient] == 0:
-                step = Steps("Pause", "Refilling {0}".format(ingredient.lowercase), currentTaco.Id)
+                step = Steps("Pause", "Refilling {0}".format(ingredient), currentTaco.Id)
                 ingrQty[ingredient] = 500
                 time.sleep(0.5)
                 step.endTime = datetime.now()

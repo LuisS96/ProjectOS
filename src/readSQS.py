@@ -51,7 +51,9 @@ def readSQS():
     adobadaIngr = {'Guacamole': 500, 'Cilantro': 500, 'Salsa': 500, 'Cebolla': 500, 'Frijoles': 500, 'tortillas': 500}
     othersIngr = {'Guacamole': 500, 'Cilantro': 500, 'Salsa': 500, 'Cebolla': 500, 'Frijoles': 500, 'tortillas': 500}
     ingrQty = [asadaIngr, adobadaIngr, othersIngr]
+    count = 0
     while True:
+        count+= 10
         try:
             response = sqs.receive_message(QueueUrl='https://sqs.us-east-1.amazonaws.com/292274580527/cc406_team6', MaxNumberOfMessages=10, WaitTimeSeconds=20)
             answersList = []
@@ -64,10 +66,14 @@ def readSQS():
             assign_queues(queues, answersList)
             threads(queues, answersList, ingrQty)
             for answer in answersList:
-                print(json.dumps(answer.__dict__(), indent=4))
+                message = (json.dumps(answer.__dict__(), indent=4))
+                print(message)
+                response = sqs.send_message(QueueUrl='https://sqs.us-east-1.amazonaws.com/292274580527/cc406_response6', MessageBody=message)
+            charts(answersList)
+        except KeyboardInterrupt:
+            raise
         except:
             print("SQS empty, all orders completed")
             return False
-
 
 readSQS()
