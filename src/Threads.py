@@ -1,10 +1,11 @@
 from threading import Thread
 from Process import *
 
-def threads(queues, answersList):  # Parallel threading
+
+def threads(queues, answersList, ingrQty):  # Parallel threading
     threadsList = []
-    for queue in queues:
-        thread = Thread(target=taquero, args=(queue, answersList), daemon=True)
+    for pos in range(len(queues)):
+        thread = Thread(target=taquero, args=(queues[pos], answersList, ingrQty[pos]), daemon=True)
         threadsList.append(thread)
         thread.start()
     for thread in threadsList:

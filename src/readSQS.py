@@ -47,18 +47,27 @@ class ComplexEncoder(json.JSONEncoder):
 def readSQS():
     sqs = boto3.client('sqs')
     received = []
+    asadaIngr = {'Guacamole': 500, 'Cilantro': 500, 'Salsa': 500, 'Cebolla': 500, 'Frijoles': 500, 'tortillas': 500}
+    adobadaIngr = {'Guacamole': 500, 'Cilantro': 500, 'Salsa': 500, 'Cebolla': 500, 'Frijoles': 500, 'tortillas': 500}
+    othersIngr = {'Guacamole': 500, 'Cilantro': 500, 'Salsa': 500, 'Cebolla': 500, 'Frijoles': 500, 'tortillas': 500}
+    ingrQty = [asadaIngr, adobadaIngr, othersIngr]
     while True:
-        response = sqs.receive_message(QueueUrl='https://sqs.us-east-1.amazonaws.com/292274580527/cc406_team6', MaxNumberOfMessages=10, WaitTimeSeconds=20)
-        answersList = []
-        queues = []
-        for message in response['Messages']:
-            received.append(message['ReceiptHandle'])
-            data = json.loads(message['Body'])
-            print(data)
-            classify_data(data, answersList)
-        assign_queues(queues, answersList)
-        threads(queues, answersList)
-        for answer in answersList:
-            print(json.dumps(answer.__dict__(), indent=4))
+        try:
+            response = sqs.receive_message(QueueUrl='https://sqs.us-east-1.amazonaws.com/292274580527/cc406_team6', MaxNumberOfMessages=10, WaitTimeSeconds=20)
+            answersList = []
+            queues = []
+            for message in response['Messages']:
+                received.append(message['ReceiptHandle'])
+                data = json.loads(message['Body'])
+                print(data)
+                classify_data(data, answersList)
+            assign_queues(queues, answersList)
+            threads(queues, answersList, ingrQty)
+            for answer in answersList:
+                print(json.dumps(answer.__dict__(), indent=4))
+        except:
+            print("SQS empty, all orders completed")
+            return False
+
 
 readSQS()

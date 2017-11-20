@@ -3,6 +3,7 @@ from datetime import datetime
 
 class Order:
     suborders = []
+    stepsList = []
 
     def __init__(self, Id, startTime):
         self.Id = Id  # String received from the SQS message
@@ -21,6 +22,16 @@ class Order:
             self.suborders.append(suborder.__dict__())
         return self.suborders
 
+    def get_steps(self):
+        self.stepsList.clear()
+        for suborder in self.subordersList:
+            stepCount = 0  # Counts all the steps that a suborder went through
+            for step in suborder.steps:
+                stepCount += 1
+                step.step = stepCount
+                self.stepsList.append(step.__dict__())
+        return self.stepsList
+
 
 class Suborder:
     def __init__(self, Id, Type, meat, qty, ingr):
@@ -30,10 +41,12 @@ class Suborder:
         self.Type = Type  # Type of order, like quesadilla, taco, mulita, etc.
         self.meat = meat  # Type of meat for the order
         self.qty = int(qty)  # Quantity of tacos ordered
+        self.tacosMade = int(qty)  # Used to know how many tacos have been made, this will go down to zero
         self.ingr = ingr  # Ingredients
         self.to_go = False  # If it to go it will change
         self.waitCycle = 0  # Time waiting to be processed, used as priority condition
         self.completed = False  # When completed, will change to True
+        self.steps = []  # List of steps that an order gets to be completed
 
     def __dict__(self):
         suborder = {'ID': self.Id, 'Type': self.Type, 'Meat': self.meat, 'Quantity': self.qty, 'Ingredients': self.ingr, 'To_go': self.to_go}
@@ -41,24 +54,13 @@ class Suborder:
 
 
 class Answer:
-    stepsList = []
-
     def __init__(self, order):
-        self.startTime = datetime.now()
         self.order = order
-        self.endTime = datetime.now()
-        self.steps = []  # List of steps that an order gets to be completed
-
-    def get_steps(self):
-        self.stepsList.clear()
-        for step in self.steps:
-            self.stepsList.append(step.__dict__())
-        return self.stepsList
 
     def __dict__(self):
         suborders = self.order.get_suborders()
         answer = {'datetime': str(self.order.startTime), 'request_id': self.order.Id, 'order': suborders,
-                  'answer': {'start_time': str(self.startTime), 'end_time': str(self.endTime), 'steps': self.get_steps()}}
+                  'answer': {'start_time': str(self.order.startTime), 'end_time': str(self.order.endTime), 'steps': self.order.get_steps()}}
         return answer
 
     def __iter__(self):
@@ -66,8 +68,8 @@ class Answer:
 
 
 class Steps:
-    def __init__(self, step, state, action, Id):
-        self.step = int(step)  # Number of steps that takes an order to be completed
+    def __init__(self, state, action, Id):
+        self.step = int()  # Number of steps that takes an order to be completed
         self.state = state  # Is it running or paused
         self.action = action
         self.Id = Id
