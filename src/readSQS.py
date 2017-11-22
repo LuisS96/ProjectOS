@@ -1,5 +1,3 @@
-__author__ = 'lfsc96'
-
 import json
 import boto3
 from queue import *
