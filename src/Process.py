@@ -40,7 +40,7 @@ def Switch(waitQueue, currentTaco, nextTaco):
     return currentTaco, nextTaco
 
 
-def priority_check(currentTaco,tacos,tortillas,ingrQty):
+def priority_check(currentTaco, tacos, tortillas, ingrQty):
     # Bonus cycles for huge orders
     if currentTaco.waitCycle >= 8:
         create_taco(tacos * 4, currentTaco, ingrQty, tortillas)
