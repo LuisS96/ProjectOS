@@ -34,26 +34,16 @@ def classify_data(data, answersList):
     answersList.append(answer)
 
 
-class ComplexEncoder(json.JSONEncoder):
-    def default(self, obj):
-        if isinstance(obj, complex):
-            return [obj.real, obj.imag]
-            # Let the base class default method raise the TypeError
-        return json.JSONEncoder.default(self, obj)
-
-
 def readSQS():
     sqs = boto3.client('sqs')
-    received = []
     asadaIngr = {'Guacamole': 500, 'Cilantro': 500, 'Salsa': 500, 'Cebolla': 500, 'Frijoles': 500, 'tortillas': 500}
     adobadaIngr = {'Guacamole': 500, 'Cilantro': 500, 'Salsa': 500, 'Cebolla': 500, 'Frijoles': 500, 'tortillas': 500}
     othersIngr = {'Guacamole': 500, 'Cilantro': 500, 'Salsa': 500, 'Cebolla': 500, 'Frijoles': 500, 'tortillas': 500}
     ingrQty = [asadaIngr, adobadaIngr, othersIngr]
-    count = 0
     while True:
-        count+= 10
         try:
             response = sqs.receive_message(QueueUrl='https://sqs.us-east-1.amazonaws.com/292274580527/cc406_team6', MaxNumberOfMessages=10, WaitTimeSeconds=20)
+            received = []
             answersList = []
             queues = []
             for message in response['Messages']:
@@ -66,8 +56,10 @@ def readSQS():
             for answer in answersList:
                 message = (json.dumps(answer.__dict__(), indent=4))
                 print(message)
-                response = sqs.send_message(QueueUrl='https://sqs.us-east-1.amazonaws.com/292274580527/cc406_response6', MessageBody=message)
-            charts(answersList)
+                # response = sqs.send_message(QueueUrl='https://sqs.us-east-1.amazonaws.com/292274580527/cc406_response6', MessageBody=message)
+            # for r in received:
+            #     response = sqs.delete_message(QueueUrl='https://sqs.us-east-1.amazonaws.com/292274580527/cc406_team6', ReceiptHandle = r)
+            # charts(answersList)
         except KeyboardInterrupt:
             raise
         except:

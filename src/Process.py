@@ -8,7 +8,7 @@ from threading import Thread
 lock = Lock()
 
 
-# Checks order for completion by checking current ID
+# Checks order completion
 def check_order(answersList, currentTaco):
     for answer in answersList:
         size = 0
@@ -39,6 +39,7 @@ def Switch(waitQueue, currentTaco, nextTaco):
     nextTaco = waitQueue.get()
     return currentTaco, nextTaco
 
+
 def priority_check(currentTaco,tacos,tortillas,ingrQty):
     # Bonus cycles for huge orders
     if currentTaco.waitCycle >= 8:
@@ -61,7 +62,7 @@ def priority_check(currentTaco,tacos,tortillas,ingrQty):
         create_taco(1, currentTaco, ingrQty, tortillas)
 
 
-def produce_tortillas(ingrQty, queue):  # define the time the tortillera needs to produce a single tortilla
+def produce_tortillas(ingrQty, queue):  #Thread dependent of thread "taquero" that produces tortillas
     while not queue.empty():
         if ingrQty['tortillas'] >= 500:  # if there's more than 500 tortillas, keep producing tortillas and let the taquero take some
             with lock:
@@ -132,9 +133,11 @@ def taquero(queue, answersList, ingrQty):  # Each "taquero" represents a thread
                 currentTaco.steps.append(step)
                 create_taco(1, currentTaco, ingrQty, tortillas)
             # While for switch
-            while currentTaco.tacosMade > 0:
+            while currentTaco.tacosMade > 0 and waitQueue.qsize() == 5:
                 currentTaco, nextTaco = Switch(waitQueue, currentTaco, nextTaco)
                 priority_check(currentTaco,tacos,tortillas,ingrQty)
+            if waitQueue.qsize() < 5:
+                waitQueue.put(currentTaco)  # Used to insert more suborders in the wait Queue.
             currentTaco.steps.append(step)
             check_order(answersList, currentTaco)
             currentTaco = nextTaco

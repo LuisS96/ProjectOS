@@ -4,9 +4,6 @@ import pandas as pd
 from classes import *
 
 
-# Receives a DataFrame of at least two keys and two columns
-# In our case, our pie is determined with our column 'Time of completion'
-# Pie chart and bar chart
 def charts(answersList):
     asada_time = []
     adobada_time = []
@@ -14,9 +11,6 @@ def charts(answersList):
     asadaTacos = 0
     adobadaTacos = 0
     othersTacos = 0
-    asada_average_time = []
-    adobada_average_time = []
-    others_average_time = []
     for answer in answersList:
         for suborder in answer.order.subordersList:
             if suborder.meat == 'Asada':
@@ -46,7 +40,7 @@ def charts(answersList):
     # grid = GridSpec(1,3)
 
     fig, axes = plt.subplots(ncols=3, figsize=(15, 10))
-    ax1,ax2,ax3 = axes.ravel()
+    ax1, ax2, ax3 = axes.ravel()
 
     # Table
     orders = []
@@ -65,7 +59,8 @@ def charts(answersList):
     table.set_fontsize(25)
     table.scale(1,1.5)
 
-    #Pie chart
+    # Pie chart
+    # Amount of time each order took to make
     ax2.pie(
         df_pie['Time of completion'],
         # labels=df_pie['Order'],
@@ -77,8 +72,8 @@ def charts(answersList):
     ax2.axis('equal')
     ax2.margins(1)
 
-    #Bar chart
-    # plt.subplot(grid[0,2], aspect=1)
+    # Bar chart
+    # Amount of tacos each order has
     length = list(range(len(df_bar['Amount of tacos'])))
     ax3.bar([p + .375 for p in length],
             df_bar['Amount of tacos'],
@@ -92,8 +87,7 @@ def charts(answersList):
     ax4,ax5 = axes.ravel()
 
     # Plot chart
-    # plt.subplot(grid[1,0], aspect = .5)
-
+    # Amount of time each suborder took to make
     ax4.plot(asada_time, 'bo-', label='Asada')
     ax4.plot(adobada_time, 'go-', label='Adobada')
     ax4.plot(others_time, 'ro-', label='Others')
