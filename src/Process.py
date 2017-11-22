@@ -63,11 +63,11 @@ def priority_check(currentTaco,tacos,tortillas,ingrQty):
 
 def produce_tortillas(ingrQty, queue):  # define the time the tortillera needs to produce a single tortilla
     while not queue.empty():
-        if ingrQty['tortillas'] >= 500:  # if there's more than 50 tortillas, keep producing tortillas and let the taquero take some
+        if ingrQty['tortillas'] >= 500:  # if there's more than 500 tortillas, keep producing tortillas and let the taquero take some
             with lock:
                 ingrQty['tortillas'] += 1  # add 1 tortilla to the total, wasting a define interval of time
         else:
-            while ingrQty['tortillas'] < 500:  # if there's less than 50 tortillas, make up to 50 tortillas and dont let the taquero take any
+            while ingrQty['tortillas'] < 500:  # if there's less than 500 tortillas, make up to 50 tortillas and dont let the taquero take any
                 with lock:
                     ingrQty['tortillas'] += 1
                 time.sleep(.2)
