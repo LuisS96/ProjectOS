@@ -5,51 +5,9 @@
 <p>
   Simulation of a taco stand called "Tacos el Franc" as an Operating System (OS).
 </p>
-<p>
-  It is established as follows:
+<p align="middle">
+<img src="https://github.com/LuisS96/ProjectOS/blob/master/FlowChart.png">
 </p>
-<ul>
-  <li>
-    3 Taqueros:  
-  </li>
-  <ul>
-    <li>1 for Asada</li>
-    <li>1 for Adobada</li>
-    <li>1 for Others:</li>
-    <ul>
-      <li>
-        Lengua
-      </li>
-      <li>
-        Cabeza
-      </li>
-      <li>
-        Tripa
-      </li>
-      <li>
-        Suadero
-      </li>
-    </ul>
-  </ul>
-  <p></p>
-  <p>
-    Each taquero is considered as a Thread and can only process one order at a time. Inside a Thread's task, considering the size of the order, ingredients and priority given, are:
-  </p>
-  <ul>
-    <li>
-      Evaluate each order.
-    </li>
-    <li>
-      Select when to put an order in "hold" and when to continue.
-    </li>
-    <li>
-      Can "prepare" a maximum of two tacos when an order is taken or continued.
-    </li>
-    <li>
-      Complete an order when finished.
-    </li>
-  </ul>
-</ul>
 <h2><a href="TOC"></a>Table of Contents</h2>
 <div id="TOC">
   <ol>
