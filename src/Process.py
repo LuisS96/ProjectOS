@@ -120,8 +120,9 @@ def taquero(queue, answersList, ingrQty):  # Each "taquero" represents a thread
     waitQueue = Queue()  # Queue for our taquero of remaining orders
     if not queue.empty():
         currentTaco = queue.get()  # suborder in process
-        while not queue.empty():
-            nextTaco = queue.get()  # next suborder
+        while not queue.empty() or not waitQueue.empty():
+            if not queue.empty():
+                nextTaco = queue.get()  # next suborder
             if currentTaco.qty == currentTaco.tacosMade:
                 currentTaco.startTime = datetime.now()
                 step = Steps("Running", "Starting your suborder - not", currentTaco.Id)
@@ -136,9 +137,10 @@ def taquero(queue, answersList, ingrQty):  # Each "taquero" represents a thread
                 currentTaco.steps.append(step)
                 create_taco(1, currentTaco, ingrQty, tortillas)
             # While for switch
-            while currentTaco.tacosMade > 0 and waitQueue.qsize() == 5:
-                currentTaco, nextTaco = Switch(waitQueue, currentTaco, nextTaco)
-                priority_check(currentTaco,tacos,tortillas,ingrQty)
+            if waitQueue.qsize() == 5 or queue.empty():
+                while currentTaco.tacosMade > 0:
+                    currentTaco, nextTaco = Switch(waitQueue, currentTaco, nextTaco)
+                    priority_check(currentTaco,tacos,tortillas,ingrQty)
             if currentTaco.tacosMade > 0:
                 waitQueue.put(currentTaco)  # Used to insert more suborders in the wait Queue.
                 currentTaco.waitCycle += 1
@@ -149,33 +151,35 @@ def taquero(queue, answersList, ingrQty):  # Each "taquero" represents a thread
                 currentTaco.steps.append(step)
                 check_order(answersList, currentTaco)
             currentTaco = nextTaco
-        if not waitQueue.empty():
-            print("ya salio")
-            nextTaco = waitQueue.get()
-        while not waitQueue.empty():
-            print("aquitoy tambn")
-            priority_check(currentTaco,tacos,tortillas,ingrQty)
-            step = Steps("Resume", "Continuing suborder - new while", currentTaco.Id)
-            currentTaco.steps.append(step)
-            if currentTaco.tacosMade == 0:
-                step = Steps("Completed", "Suborder finished", currentTaco.Id)
-                currentTaco.steps.append(step)
-                check_order(answersList, currentTaco)
-                currentTaco = nextTaco
-                nextTaco = waitQueue.get()
-            currentTaco, nextTaco = Switch(waitQueue, currentTaco, nextTaco)
-            if waitQueue.empty():
-                while nextTaco.tacosMade > 0:
-                print("SANDIAS QUE MORGAN FREEMAN EN REALIDAD NO ES DIOS")
-                priority_check(currentTaco,tacos,tortillas,ingrQty)
-                step = Steps("Resume", "Continuing suborder - new new new while", currentTaco.Id)
-                currentTaco.steps.append(step)
-                if currentTaco.tacosMade == 0:
-                    step = Steps("Completed", "Suborder finished", currentTaco.Id)
-                    currentTaco.steps.append(step)
-                    currentTaco = nextTaco
-                    break
-                currentTaco, nextTaco = Switch(waitQueue, currentTaco, nextTaco)
+            if currentTaco == nextTaco:
+                break
+        # if not waitQueue.empty():
+        #     print("ya salio")
+        #     nextTaco = waitQueue.get()
+        # while not waitQueue.empty():
+        #     print("aquitoy tambn")
+        #     priority_check(currentTaco,tacos,tortillas,ingrQty)
+        #     step = Steps("Resume", "Continuing suborder - new while", currentTaco.Id)
+        #     currentTaco.steps.append(step)
+        #     if currentTaco.tacosMade == 0:
+        #         step = Steps("Completed", "Suborder finished", currentTaco.Id)
+        #         currentTaco.steps.append(step)
+        #         check_order(answersList, currentTaco)
+        #         currentTaco = nextTaco
+        #         nextTaco = waitQueue.get()
+        #     currentTaco, nextTaco = Switch(waitQueue, currentTaco, nextTaco)
+        #     if waitQueue.empty():
+        #         while nextTaco.tacosMade > 0:
+        #         print("SANDIAS QUE MORGAN FREEMAN EN REALIDAD NO ES DIOS")
+        #         priority_check(currentTaco,tacos,tortillas,ingrQty)
+        #         step = Steps("Resume", "Continuing suborder - new new new while", currentTaco.Id)
+        #         currentTaco.steps.append(step)
+        #         if currentTaco.tacosMade == 0:
+        #             step = Steps("Completed", "Suborder finished", currentTaco.Id)
+        #             currentTaco.steps.append(step)
+        #             currentTaco = nextTaco
+        #             break
+        #         currentTaco, nextTaco = Switch(waitQueue, currentTaco, nextTaco)
         while currentTaco.tacosMade > 0:
             print("aquitoy")
             if currentTaco.waitCycle == 0 and currentTaco.tacosMade == currentTaco.qty:
