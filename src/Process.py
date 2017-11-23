@@ -26,22 +26,22 @@ def check_order(answersList, currentTaco):
 def Switch(waitQueue, currentTaco, nextTaco):
     currentTaco.waitCycle += 1
     waitQueue.put(currentTaco)
-    step = Steps("Pause", "Pausing suborder - sw", currentTaco.Id)
+    step = Steps("Pause", "Pausing suborder", currentTaco.Id)
     currentTaco.steps.append(step)
     currentTaco = nextTaco
     if currentTaco.waitCycle == 0:
         currentTaco.startTime = datetime.now()
-        step = Steps("Running", "Starting your suborder - sw", currentTaco.Id)
+        step = Steps("Running", "Starting your suborder", currentTaco.Id)
         currentTaco.steps.append(step)
     else:
-        step = Steps("Resume", "Continuing suborder - sw", currentTaco.Id)
+        step = Steps("Resume", "Continuing suborder", currentTaco.Id)
         currentTaco.steps.append(step)
     nextTaco = waitQueue.get()
     return currentTaco, nextTaco
 
 
 def priority_check(currentTaco, tacos, tortillas, ingrQty):
-    #step = Steps("Resume", "Continuing suborder - pc", currentTaco.Id)
+    #step = Steps("Resume", "Continuing suborder", currentTaco.Id)
     #currentTaco.steps.append(step)
     # Bonus cycles for huge orders
     if currentTaco.waitCycle >= 8:
@@ -59,7 +59,7 @@ def priority_check(currentTaco, tacos, tortillas, ingrQty):
         create_taco(tacos, currentTaco, ingrQty, tortillas)
 
     if currentTaco.tacosMade == 1:
-        step = Steps("Resume", "Continuing suborder - pc", currentTaco.Id)
+        step = Steps("Resume", "Continuing suborder", currentTaco.Id)
         currentTaco.steps.append(step)
         create_taco(1, currentTaco, ingrQty, tortillas)
 
@@ -127,15 +127,15 @@ def taquero(queue, answersList, ingrQty):  # Each "taquero" represents a thread
                 nextTaco = queue.get()  # next suborder
             if currentTaco.qty == currentTaco.tacosMade:
                 currentTaco.startTime = datetime.now()
-                step = Steps("Running", "Starting your suborder - not", currentTaco.Id)
+                step = Steps("Running", "Starting your suborder", currentTaco.Id)
                 currentTaco.steps.append(step)
                 create_taco(tacos, currentTaco, ingrQty, tortillas)
             else:
-                step = Steps("Resume", "Continuing suborder - not", currentTaco.Id)
+                step = Steps("Resume", "Continuing suborder", currentTaco.Id)
                 currentTaco.steps.append(step)
                 priority_check(currentTaco, tacos, tortillas, ingrQty)
             if currentTaco.tacosMade == 1:
-                step = Steps("Resume", "Continuing suborder - not", currentTaco.Id)
+                step = Steps("Resume", "Continuing suborder", currentTaco.Id)
                 currentTaco.steps.append(step)
                 create_taco(1, currentTaco, ingrQty, tortillas)
             # While for switch
@@ -146,7 +146,7 @@ def taquero(queue, answersList, ingrQty):  # Each "taquero" represents a thread
             if currentTaco.tacosMade > 0:
                 waitQueue.put(currentTaco)  # Used to insert more suborders in the wait Queue.
                 currentTaco.waitCycle += 1
-                step = Steps("Pause", "Pausing suborder - first", currentTaco.Id)
+                step = Steps("Pause", "Pausing suborder", currentTaco.Id)
                 currentTaco.steps.append(step)
             if currentTaco.tacosMade == 0:
                 step = Steps("Completed", "Suborder finished", currentTaco.Id)
@@ -156,10 +156,10 @@ def taquero(queue, answersList, ingrQty):  # Each "taquero" represents a thread
         while currentTaco.tacosMade > 0:
             if currentTaco.waitCycle == 0 and currentTaco.tacosMade == currentTaco.qty:
                 currentTaco.startTime = datetime.now()
-                step = Steps("Running", "Starting your suborder - md", currentTaco.Id)
+                step = Steps("Running", "Starting your suborder", currentTaco.Id)
                 currentTaco.steps.append(step)
             else:
-                step = Steps("Resume", "Continuing suborder - md", currentTaco.Id)
+                step = Steps("Resume", "Continuing suborder", currentTaco.Id)
                 currentTaco.steps.append(step)
             priority_check(currentTaco, tacos, tortillas, ingrQty)
 
