@@ -58,7 +58,7 @@ def priority_check(currentTaco, tacos, tortillas, ingrQty):
     else:
         create_taco(tacos, currentTaco, ingrQty, tortillas)
 
-    if currentTaco.tacosMade == 1:
+    if currentTaco.tacosToMake == 1:
         step = Steps("Resume", "Continuing suborder", currentTaco.Id)
         currentTaco.steps.append(step)
         create_taco(1, currentTaco, ingrQty, tortillas)
@@ -86,7 +86,7 @@ def grab_tortillas(ingrQty):  # refill the taquero's tortillas with the tortilla
 
 def create_taco(tacos, currentTaco, ingrQty, tortillas):
     madeTacos = 0
-    while currentTaco.tacosMade > 0 and madeTacos < tacos:  # check if the order still has due tacos to avoid making extra iterations
+    while currentTaco.tacosToMake > 0 and madeTacos < tacos:  # check if the order still has due tacos to avoid making extra iterations
         for ingredient in ingrQty:  # refill an ingredient when their qty is 0
             if ingredient == 'tortillas' and ingrQty[ingredient] == 0:
                 step = Steps("Pause", "Refilling {0}".format(ingredient), currentTaco.Id)
@@ -108,7 +108,7 @@ def create_taco(tacos, currentTaco, ingrQty, tortillas):
                 ingrQty[ingredient] -= 1
         time.sleep(.1) # it takes the taquero 0.1 seconds to make a taco
         madeTacos += 1 # count of tacos made
-        currentTaco.tacosMade -= 1 # substract 1 taco from the order
+        currentTaco.tacosToMake -= 1 # substract 1 taco from the order
 
 
 
@@ -125,7 +125,7 @@ def taquero(queue, answersList, ingrQty):  # Each "taquero" represents a thread
                 nextTaco = waitQueue.get()
             if not queue.empty():
                 nextTaco = queue.get()  # next suborder
-            if currentTaco.qty == currentTaco.tacosMade:
+            if currentTaco.qty == currentTaco.tacosToMake:
                 currentTaco.startTime = datetime.now()
                 step = Steps("Running", "Starting your suborder", currentTaco.Id)
                 currentTaco.steps.append(step)
@@ -134,27 +134,27 @@ def taquero(queue, answersList, ingrQty):  # Each "taquero" represents a thread
                 step = Steps("Resume", "Continuing suborder", currentTaco.Id)
                 currentTaco.steps.append(step)
                 priority_check(currentTaco, tacos, tortillas, ingrQty)
-            if currentTaco.tacosMade == 1:
+            if currentTaco.tacosToMake == 1:
                 step = Steps("Resume", "Continuing suborder", currentTaco.Id)
                 currentTaco.steps.append(step)
                 create_taco(1, currentTaco, ingrQty, tortillas)
             # While for switch
             if waitQueue.qsize() == 5 or queue.empty():
-                while currentTaco.tacosMade > 0:
+                while currentTaco.tacosToMake > 0:
                     currentTaco, nextTaco = Switch(waitQueue, currentTaco, nextTaco)
                     priority_check(currentTaco,tacos,tortillas,ingrQty)
-            if currentTaco.tacosMade > 0:
+            if currentTaco.tacosToMake > 0:
                 waitQueue.put(currentTaco)  # Used to insert more suborders in the wait Queue.
                 currentTaco.waitCycle += 1
                 step = Steps("Pause", "Pausing suborder", currentTaco.Id)
                 currentTaco.steps.append(step)
-            if currentTaco.tacosMade == 0:
+            if currentTaco.tacosToMake == 0:
                 step = Steps("Completed", "Suborder finished", currentTaco.Id)
                 currentTaco.steps.append(step)
                 check_order(answersList, currentTaco)
             currentTaco = nextTaco
-        while currentTaco.tacosMade > 0:
-            if currentTaco.waitCycle == 0 and currentTaco.tacosMade == currentTaco.qty:
+        while currentTaco.tacosToMake > 0:
+            if currentTaco.waitCycle == 0 and currentTaco.tacosToMake == currentTaco.qty:
                 currentTaco.startTime = datetime.now()
                 step = Steps("Running", "Starting your suborder", currentTaco.Id)
                 currentTaco.steps.append(step)

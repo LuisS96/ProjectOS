@@ -1,7 +1,7 @@
 from datetime import datetime
 
 
-class Order:
+class Order(object):
     suborders = []
     stepsList = []
 
@@ -33,7 +33,7 @@ class Order:
         return self.stepsList
 
 
-class Suborder:
+class Suborder(object):
     def __init__(self, Id, Type, meat, qty, ingr):
         self.Id = Id  # String received from the SQS message
         self.startTime = datetime.now()
@@ -41,7 +41,7 @@ class Suborder:
         self.Type = Type  # Type of order, like quesadilla, taco, mulita, etc.
         self.meat = meat  # Type of meat for the order
         self.qty = int(qty)  # Quantity of tacos ordered
-        self.tacosMade = int(qty)  # Used to know how many tacos have been made, this will go down to zero
+        self.tacosToMake = int(qty)  # Used to know how many tacos have been made, this will go down to zero
         self.ingr = ingr  # Ingredients
         self.to_go = False  # If it to go it will change
         self.waitCycle = 0  # Time waiting to be processed, used as priority condition
@@ -53,7 +53,7 @@ class Suborder:
         return suborder
 
 
-class Answer:
+class Answer(object):
     def __init__(self, order):
         self.order = order
 
@@ -67,7 +67,7 @@ class Answer:
         return self
 
 
-class Steps:
+class Steps(object):
     def __init__(self, state, action, Id):
         self.step = int()  # Number of steps that takes an order to be completed
         self.state = state  # Is it running or paused
