@@ -8,6 +8,9 @@
 <p align="middle">
 <img src="https://github.com/LuisS96/ProjectOS/blob/master/FlowChart.png">
 </p>
+<p align="middle">
+  For a more in-code approach, click here <a href="https://github.com/LuisS96/ProjectOS/blob/master/pseudocode.txt"> pseudocode </a>
+</p>
 <h2><a href="TOC"></a>Table of Contents</h2>
 <div id="TOC">
   <ol>
