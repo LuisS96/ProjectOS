@@ -143,7 +143,7 @@ To run the programm follow the next instructions:
     Download the folder <a href="https://github.com/LuisS96/ProjectOS/tree/master/src">src</a>.
   </li>
   <li>
-    Make sure you have all to date and run the file <a href="https://github.com/LuisS96/ProjectOS/blob/master/src/TacosMain.py">TacosMain.py</a>.
+    Make sure you have all to date and run the file <a href="https://github.com/LuisS96/ProjectOS/blob/master/src/Threads.py">TacosMain.py</a>.
   </li>
 </ol>
 <p>
