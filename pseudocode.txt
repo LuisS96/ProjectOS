@@ -1,0 +1,178 @@
+Class Order:
+	Suborders = Manipulable list of suborders
+	Steps = Steps list
+	Declare Order with an ID and start time:
+		Order’s ID
+ 		Start time
+        End Time 
+        Fixed suborders list
+        Boolean indicating the Order’s status
+        Number of Suborders
+	
+	The class must be iterative
+	
+	Define get_suborders():
+		Clear suborders and add the current suborders in the fixed suborders list
+
+	Define get_steps():
+		Clear the steps list from the order and add the steps from all the suborders.
+
+Class Suborder:
+	Declare a suborder with an ID, type of taco, type of meat, tacos’ quantity and the ingredients:
+
+		The Object has an ID
+		Start time
+		End time
+		Type of meat
+		Quantity of tacos
+		Number of tacos due
+        Tacos ingredients
+        Boolean indicating if the suborder is to go
+        Number of cycles the suborder has waited to be processed
+        Boolean indicating the status of the suborder
+        List of the steps the suborder had to go through to be completed
+	
+    Define the dictionary functionality of the Object with all the info of the suborder
+
+Class Answer:
+	Define the answer as an order
+	Define the dictionary functionality of the object with all the info of the order
+	It’s iterable
+
+Class Steps:
+	Define the Step with the state of the suborder, the action to be made and the ID:
+		The number of steps that takes an order to be completed
+		The state of the suborder
+		The action to be made
+		The ID of the suborder
+		The start time of the step
+		The end time of the step
+	Define the dictionary functionality of the object with all the info of the steps
+Define Threads(queues, answersList, ingrQty):
+	threadsList = list of created threads
+	for each index in the length of queues:
+		create a thread that processes the tacos of the queue assigned with its respective ingredient dictionary and the answer list
+		add the thread to the threads list
+		initialize the thread 
+	for each thread in the thread list:
+		check if the thread finishes
+
+Define assign_queues(queues, answersList):
+    asadaQueue = queue for asada tacos
+    adobadaQueue = queue for adobada tacos
+    otherQueue = queue for the rest of tacos, quesadillas, etc.
+    For each answer in the answers List:
+		For each suborder in each answer:
+			Separate the suborders and add them into the respective queue
+    Add the queues into a queues list
+
+Define classify_data(data, answersList):
+    Order = Order Object created with the ID and start time given by the data
+    For each suborder in the data’s order:
+		Increase the suborder count in the Order
+		Add the suborders from the data’s order to the object Order
+    Answer = Answer object made with Order
+    Add Answer to the Answers List
+
+
+
+
+
+Define readSQS():
+	Sqs = SQS client
+	asadaIngr = Dictionary for the ingredients of the asada taco
+	adobadaIngr = Dictionary for the ingredients of the adobada taco
+	othersIngr = Dictionary for the ingredients rest of the tacos, quesadillas, etc.
+	ingrQty = list of the dictionaries for each type of meat
+	Iterates until it’s interrupted
+		try:
+			Receive 10 orders from SQS every 20 seconds
+			Recibidos = lista de mensajes recibidos
+			Respuestas = Lista de respuestas
+			queues = lista de queues
+			Por cada mensaje recibido:
+				Agregar a Recibidos el “Handle” del mensaje
+				data = Traducir de json el contenido del mensaje recibido
+				Clarify_data(data, Repuestas)
+			Assign_queues(queues, Respuestas)
+			Threads(queues, Respuestas, ingrQty)
+			Por cada respuesta en Respuestas:
+                convertir respuesta a json
+				imprimir el mensaje
+                responde a SQS con contenido del mensaje convertido a json
+            Por cada mensaje recibido:
+                Borrar mensaje de SQS
+		Si no funciona porque es interrumpido por el teclado:
+			Detener
+		Si no funciona porque ya no hay más mensajes:
+			Imprimir un mensaje indicando que todas las órdenes fueron procesadas
+			Detener el ciclo
+
+Define check_order(answersList, currentSuborder):
+	For each answer in the answers list:
+		Counter = Number of completed suborders in the order
+		For each suborder in the current answer:
+			If the suborder is in this order:
+				Establish the suborder as completed and mark the finish time
+			If the current suborder was completed:
+				Increase the counter
+			If all the suborders in the current order are completed:
+				Establish the order as completed and mark the finish time
+
+Define Switch(WaitQueue, currentSuborder, nextSuborder):
+	Increase the number of wait cycles in the current suborder and add it to the wait queue
+	Add the pause step to the current suborder’s step history
+	Define the next suborder as the current suborder
+	Add the start or resume step to the current taco in case it’s processed or not
+Define the next suborder in the wait queue as nextSuborder
+
+Define priority_check(currentTaco, tacos, tortillas, ingrQty):
+	if the current suborder has gone through 8 or more wait cycles then work on the suborder 3 more cycles
+	else if the current suborder has gone through 6 or more wait cycles then work on the suborder 2 more cycles
+	else if the current suborder has gone through 2 or more wait cycles then work on the suborder 1 more cycle
+	else work on the suborder just 1 cycle
+	if there’s only one more taco due in the current suborder then just do the last taco due
+
+Define produce_tortillas(ingrQty, queue):  
+    while there’s still suborders due and there’s more than 500 tortillas, produce 1 tortilla over time
+else
+    if theres less than 500 tortillas produce tortillas until there’s 500 without letting anyone take tortillas
+
+Define grab_tortillas(ingrQty):     
+    if there’s less than 500 tortillas, wait for 500 tortillas to be produced
+    else, take 500 tortillas
+
+
+
+Define create_taco(numberOfTacosThatCanBeMade, currentSuborder,ingrQty, tortillas):
+	M = number of tacos made this cycle
+	While there’s still tacos to make in the suborder and the number of tacos made this cycle is less than the number of tacos that can be made:
+		If there’s not enough tortillas:
+			add the pause and refilling tortillas step to the suborder’s step history
+			grab_tortillas(ingrQty)
+			add the resume step to the suborder’s step history
+		if there’s not enough ingredients:
+add the pause and refilling ingredient step to the suborder’s step history
+			refill the missing ingredient
+			add the resume step to the suborder’s step history
+		else decrease the ingredients used’ counter by 1
+		increase the counter of tacos made and decrease the counter of tacos tomake both by 1
+
+Define taquero(queue, answersList,ingrQty):
+	Start the thread of the tortillera that will provide tortillas with the method produce_tortillas
+	Cycle = Define the number of tacos that can be made in one cycle
+	Ask the tortillera for tortillas with grab_tortillas(ingrQty)
+	waitQueue = the wait queue
+	If there’s suborders to process, get the next suborder from the queue and define it as current suborder
+	While the queue or the wait queue are not empty:
+		If the queue is empty, define the next suborder in the wait queue as the next suborder
+		If it’s not empty, define the next suborder in the queue as the next suborder
+		If the current suborder hasn’t been processed, add the start step to the suborder’s step history and start working on the order
+		Else, add the resume step to the suborder’s step history and start working on the order
+		If there’s only one taco due on the suborder, make it and finish the order, adding the resume step to the suborder’s step history
+		If the wait queue has 5 suborders in it or if the queue is empty, switch orders from the wait queue with switch(WaitQueue, currentSuborder, nextSuborder) and process them until one’s done, in the first case) or until there’s just one suborder left, in the second case
+		If the wait queue has less than 5 suborders in it, put the current suborder in the queue, increase the wait cycle of the suborder and add the pause step to the suborder’s step history
+		If the suborder’s tacos due counter gets to zero, add the completed step to the suborder’s step history, mark the suborder as completed in the order and check if the order is completed with check_order(answersList, currentSuborder)
+		Assign next suborder as the current suborder
+	While the last suborder is not completed:
+		Process the suborder
