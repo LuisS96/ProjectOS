@@ -2,7 +2,7 @@
 <img src="https://betanews.com/wp-content/uploads/2016/08/operating-system.jpg" width=700 height=450>
 </p>
 <h1>Project OS</h1>
-<p>
+<p align="middle">
   Simulation of a taco stand called "Tacos el Franc" as an Operating System (OS).
 </p>
 <p align="middle">
