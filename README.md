@@ -109,21 +109,23 @@ List of elements that are needed to be installed to run the code properly.
         <pre>.aws</pre>
       </li>
       <p>Inside this foler, add the next files:</p>
-      <li>
-        credentials
-        <pre>
+      <ul>
+        <li>
+          credentials
+          <pre>
 [default]
 aws_access_key_id = YOUR_ACCESS_KEY
 aws_secret_access_key = YOUR_SECRET_KEY
-        </pre>
-      </li>
-      <li>
-        config
-        <pre>
+          </pre>
+        </li>
+        <li>
+          config
+          <pre>
 [default]
 region=us-east-1
-        </pre>
-      </li>
+          </pre>
+        </li>
+      </ul>
     </ul>
   </li>
 </ul>
