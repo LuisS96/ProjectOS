@@ -143,11 +143,11 @@ To run the programm follow the next instructions:
     Download the folder <a href="https://github.com/LuisS96/ProjectOS/tree/master/src">src</a>.
   </li>
   <li>
-    Make sure you have all to date and run the file <a href="https://github.com/LuisS96/ProjectOS/blob/master/src/Threads.py">TacosMain.py</a>.
+    Make sure you have all to date and run the file <a href="https://github.com/LuisS96/ProjectOS/blob/master/src/Threads.py">readSQS.py</a>.
   </li>
 </ol>
 <p>
-  If any change is needed to be made you can do so in the documents that are inside the folder <a href="https://github.com/LuisS96/ProjectOS/tree/master/src">src</a>, linked to the main file 'TacosMain.py'.
+  If any change is needed to be made you can do so in the documents that are inside the folder <a href="https://github.com/LuisS96/ProjectOS/tree/master/src">src</a>, linked to the main file 'readSQS.py'.
 <div id="contributors">
   <h2><a href="#TOC"></a>
   4. Contributors
