@@ -2,11 +2,14 @@
 <img src="https://betanews.com/wp-content/uploads/2016/08/operating-system.jpg" width=700 height=450>
 </p>
 <h1>Project OS</h1>
-<p>
+<p align="middle">
   Simulation of a taco stand called "Tacos el Franc" as an Operating System (OS).
 </p>
 <p align="middle">
 <img src="https://github.com/LuisS96/ProjectOS/blob/master/FlowChart.png">
+</p>
+<p align="middle">
+  For a more in-code approach, click here <a href="https://github.com/LuisS96/ProjectOS/blob/master/pseudocode.txt"> pseudocode </a>
 </p>
 <h2><a href="TOC"></a>Table of Contents</h2>
 <div id="TOC">
@@ -109,21 +112,23 @@ List of elements that are needed to be installed to run the code properly.
         <pre>.aws</pre>
       </li>
       <p>Inside this foler, add the next files:</p>
-      <li>
-        credentials
-        <pre>
+      <ul>
+        <li>
+          credentials
+          <pre>
 [default]
 aws_access_key_id = YOUR_ACCESS_KEY
 aws_secret_access_key = YOUR_SECRET_KEY
-        </pre>
-      </li>
-      <li>
-        config
-        <pre>
+          </pre>
+        </li>
+        <li>
+          config
+          <pre>
 [default]
 region=us-east-1
-        </pre>
-      </li>
+          </pre>
+        </li>
+      </ul>
     </ul>
   </li>
 </ul>
@@ -141,11 +146,11 @@ To run the programm follow the next instructions:
     Download the folder <a href="https://github.com/LuisS96/ProjectOS/tree/master/src">src</a>.
   </li>
   <li>
-    Make sure you have all to date and run the file <a href="https://github.com/LuisS96/ProjectOS/blob/master/src/TacosMain.py">TacosMain.py</a>.
+    Make sure you have all to date and run the file <a href="https://github.com/LuisS96/ProjectOS/blob/master/src/Threads.py">readSQS.py</a>.
   </li>
 </ol>
 <p>
-  If any change is needed to be made you can do so in the documents that are inside the folder <a href="https://github.com/LuisS96/ProjectOS/tree/master/src">src</a>, linked to the main file 'TacosMain.py'.
+  If any change is needed to be made you can do so in the documents that are inside the folder <a href="https://github.com/LuisS96/ProjectOS/tree/master/src">src</a>, linked to the main file 'readSQS.py'.
 <div id="contributors">
   <h2><a href="#TOC"></a>
   4. Contributors
