@@ -62,8 +62,4 @@ def readSQS():
             charts(answersList)
         except KeyboardInterrupt:
             raise
-        except:
-            print("SQS empty, all orders completed")
-            return False
-
 readSQS()
