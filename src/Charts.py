@@ -120,11 +120,6 @@ def charts(answersList):
             )
     plt.tight_layout()
 
-    fig, axes = plt.subplots(ncols=2, figsize=(10, 10))
-    ax4,ax5 = axes.ravel()
-
-    plt.tight_layout()
-
     plt.show()
 
 
