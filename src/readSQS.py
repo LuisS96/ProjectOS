@@ -20,11 +20,20 @@ def assign_queues(queues, answersList):
     for answer in answersList:
         for suborder in answer.order.subordersList:  # Each suborder will be assigned to its respective queue according to the type of meat
             if suborder.meat == 'Asada':
-                queues[0].put(suborder)
+                with lock:
+                    if queues[0].empty():
+                        threadPermits[0] = 1
+                    queues[0].put(suborder)
             elif suborder.meat == 'Adobada':
-                queues[1].put(suborder)
+                with lock:
+                    if queues[1].empty():
+                        threadPermits[1] = 1
+                    queues[1].put(suborder)
             else:
-                queues[2].put(suborder)
+                with lock:
+                    if queues[2].empty():
+                        threadPermits[2] = 1
+                    queues[2].put(suborder)
     # queues.append(asadaQueue)
     # queues.append(adobadaQueue)
     # queues.append(othersQueue)
@@ -41,6 +50,7 @@ def classify_data(data, answersList):
     answer = Answer(order)
     answersList.append(answer)
 
+threadPermits = [0,0,0] # if 0 the thread shouldn't be thrown, if 1 it should be thrown
 queues = []
 def readSQS():
     sqs = boto3.client('sqs')
@@ -62,7 +72,7 @@ def readSQS():
                 print(data)
                 classify_data(data, answersList)
             assign_queues(queues, answersList)
-            threads(queues, answersList, ingrQty)
+            threads(queues, answersList, ingrQty,threadPermits)
             # for answer in answersList:
                 # message = (json.dumps(answer.__dict__(), indent=4))
                 # print(message)
