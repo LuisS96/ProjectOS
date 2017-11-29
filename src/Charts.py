@@ -47,7 +47,7 @@ def charts(answersList):
     df_bar = pd.DataFrame(raw_data_bar, columns=['Order', 'Amount of tacos'])
     print(df_bar)
 
-    raw_data_bar2 = {"Order": ['Asada', 'Adobada', 'Others'], "Steps": [asada_step_average,adobada_step_averageothers_step_average]}
+    raw_data_bar2 = {"Order": ['Asada', 'Adobada', 'Others'], "Steps": [asada_step_average,adobada_step_average,others_step_average]}
     df_bar2 = pd.DataFrame(raw_data_bar2, columns=['Order','Steps'])
     # raw_data_plot = {'Meat Type':['Asada','Adobada','Others'],
     #                  'Time Spent': [asada_time, adobada_time, others_time]}
@@ -118,11 +118,6 @@ def charts(answersList):
             color=colors,
             label=df_bar2["Order"]
             )
-    plt.tight_layout()
-
-    fig, axes = plt.subplots(ncols=2, figsize=(10, 10))
-    ax4,ax5 = axes.ravel()
-
     plt.tight_layout()
 
     plt.show()
