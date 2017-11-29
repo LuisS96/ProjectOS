@@ -56,10 +56,10 @@ def readSQS():
             for answer in answersList:
                 message = (json.dumps(answer.__dict__(), indent=4))
                 print(message)
-                response = sqs.send_message(QueueUrl='https://sqs.us-east-1.amazonaws.com/292274580527/cc406_response6', MessageBody=message)
-            for r in received:
-                response = sqs.delete_message(QueueUrl='https://sqs.us-east-1.amazonaws.com/292274580527/cc406_team6', ReceiptHandle = r)
-            charts(answersList)
+                # response = sqs.send_message(QueueUrl='https://sqs.us-east-1.amazonaws.com/292274580527/cc406_response6', MessageBody=message)
+            # for r in received:
+            #     response = sqs.delete_message(QueueUrl='https://sqs.us-east-1.amazonaws.com/292274580527/cc406_team6', ReceiptHandle = r)
+            # charts(answersList)
         except KeyboardInterrupt:
             raise
 readSQS()
