@@ -1,12 +1,15 @@
 from classes import *
 from queue import *
+from Charts import *
+import json
+import boto3
 import time as time
+# from readSQS import counter
 from datetime import datetime
 from threading import Lock
 from threading import Thread
 
 lock = Lock()
-
 
 # Checks order completion
 def check_order(answersList, currentTaco):
@@ -21,6 +24,12 @@ def check_order(answersList, currentTaco):
                 if size == answer.order.totalSubs and answer.order.completed is False:
                     answer.order.completed = True
                     answer.order.endTime = datetime.now()
+                    sqs = boto3.client('sqs')
+                    message = (json.dumps(answer.__dict__(), indent=4))
+                    # response = sqs.send_message(QueueUrl='https://sqs.us-east-1.amazonaws.com/292274580527/cc406_response6', MessageBody=message)
+                    print(message)
+                    # if counter % 10 == 0:
+                    #     charts(answersList)
 
 
 def Switch(waitQueue, currentTaco, nextTaco):
