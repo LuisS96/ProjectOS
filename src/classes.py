@@ -7,7 +7,8 @@ class Order(object):
 
     def __init__(self, Id, startTime):
         self.Id = Id  # String received from the SQS message
-        self.startTime = datetime.strptime(startTime, "%Y-%m-%d %H:%M:%S")  # datetime received from the SQS message
+        #self.startTime = datetime.strptime(startTime, "%Y-%m-%d %H:%M:%S")  # datetime received from the SQS message
+        self.startTime = datetime.now()
         self.endTime = datetime.now()  # Will be replaced by the time it finishes
         self.subordersList = []  # List of suborders
         self.completed = False  # when completed, will changed to True

@@ -53,13 +53,13 @@ def classify_data(data, answersList):
 threadPermits = [0,0,0] # if 0 the thread shouldn't be thrown, if 1 it should be thrown
 queues = []
 def readSQS():
+    StatsDict = {'Steps_Asada' : 0, 'Total_Asada' : 0, 'Time_Asada' : 0, 'Total_AsOrders' : 0, 'Steps_Adobada' : 0, 'Total_Adobada' : 0,'Time_Adobada' : 0,  'Total_AdOrders' : 0, 'Steps_Others' : 0, 'Total_Others' : 0, 'Time_Others' : 0, 'Total_OtOrders' : 0, 'Counter' : 0}
     sqs = boto3.client('sqs')
     asadaIngr = {'Guacamole': 500, 'Cilantro': 500, 'Salsa': 500, 'Cebolla': 500, 'Frijoles': 500, 'tortillas': 500}
     adobadaIngr = {'Guacamole': 500, 'Cilantro': 500, 'Salsa': 500, 'Cebolla': 500, 'Frijoles': 500, 'tortillas': 500}
     othersIngr = {'Guacamole': 500, 'Cilantro': 500, 'Salsa': 500, 'Cebolla': 500, 'Frijoles': 500, 'tortillas': 500}
     ingrQty = [asadaIngr, adobadaIngr, othersIngr]
     create_queues(queues)
-    counter  = 0
     while True:
         try:
             response = sqs.receive_message(QueueUrl='https://sqs.us-east-1.amazonaws.com/292274580527/cc406_team6', MaxNumberOfMessages=10, WaitTimeSeconds=20)
@@ -72,7 +72,7 @@ def readSQS():
                 print(data)
                 classify_data(data, answersList)
             assign_queues(queues, answersList)
-            threads(queues, answersList, ingrQty,threadPermits)
+            threads(queues, answersList, ingrQty,threadPermits,StatsDict)
             # for answer in answersList:
                 # message = (json.dumps(answer.__dict__(), indent=4))
                 # print(message)

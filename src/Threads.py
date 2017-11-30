@@ -2,11 +2,11 @@ from threading import Thread
 from Process import *
 
 
-def threads(queues, answersList, ingrQty,threadPermits):  # Parallel threading
+def threads(queues, answersList, ingrQty,threadPermits,StatsDict):  # Parallel threading
     threadsList = []
     for pos in range(len(queues)):
         if threadPermits[pos] == 1:
-            thread = Thread(target=taquero, args=(queues[pos], answersList, ingrQty[pos]), daemon=True)
+            thread = Thread(target=taquero, args=(queues[pos], answersList, ingrQty[pos],StatsDict), daemon=True)
             threadsList.append(thread)
             thread.start()
             threadPermits[pos] = 0

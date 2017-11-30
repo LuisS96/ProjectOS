@@ -12,7 +12,7 @@ from threading import Thread
 lock = Lock()
 
 # Checks order completion
-def check_order(answersList, currentTaco):
+def check_order(answersList, currentTaco, StatsDict):
     for answer in answersList:
         size = 0
         for suborder in answer.order.subordersList:
@@ -21,15 +21,31 @@ def check_order(answersList, currentTaco):
                 suborder.completed = True
             if suborder.completed:
                 size += 1
+                if suborder.meat == 'Asada':
+                    StatsDict['Total_Asada'] += suborder.qty
+                    StatsDict['Steps_Asada'] += len(suborder.steps)
+                    StatsDict['Time_Asada'] += (suborder.endTime - suborder.startTime).total_seconds()
+                    StatsDict['Total_AsOrders'] += 1
+                if suborder.meat == 'Adobada':
+                    StatsDict['Total_Adobada'] += suborder.qty
+                    StatsDict['Steps_Adobada'] += len(suborder.steps)
+                    StatsDict['Time_Adobada'] += (suborder.endTime - suborder.startTime).total_seconds()
+                    StatsDict['Total_AdOrders'] += 1
+                else:
+                    StatsDict['Total_Others'] += suborder.qty
+                    StatsDict['Steps_Others'] += len(suborder.steps)
+                    StatsDict['Time_Others'] += (suborder.endTime - suborder.startTime).total_seconds()
+                    StatsDict['Total_OtOrders'] += 1
                 if size == answer.order.totalSubs and answer.order.completed is False:
                     answer.order.completed = True
                     answer.order.endTime = datetime.now()
+                    StatsDict['Counter'] += 1
                     sqs = boto3.client('sqs')
                     message = (json.dumps(answer.__dict__(), indent=4))
                     # response = sqs.send_message(QueueUrl='https://sqs.us-east-1.amazonaws.com/292274580527/cc406_response6', MessageBody=message)
                     print(message)
-                    # if counter % 10 == 0:
-                    #     charts(answersList)
+                    if StatsDict['Counter'] % 10 == 0:
+                        charts(answersList, StatsDict)
 
 
 def Switch(waitQueue, currentTaco, nextTaco):
@@ -121,7 +137,7 @@ def create_taco(tacos, currentTaco, ingrQty, tortillas):
 
 
 
-def taquero(queue, answersList, ingrQty):  # Each "taquero" represents a thread
+def taquero(queue, answersList, ingrQty, StatsDict):  # Each "taquero" represents a thread
     threadTortillera = Thread(target=produce_tortillas, args=(ingrQty, queue), daemon=True)  # Creates thread tortillera, produces the tortillas
     threadTortillera.start()
     tacos = 2  # Amount of tacos that a "taquero" can make at a time.
@@ -160,7 +176,7 @@ def taquero(queue, answersList, ingrQty):  # Each "taquero" represents a thread
             if currentTaco.tacosToMake == 0:
                 step = Steps("Completed", "Suborder finished", currentTaco.Id)
                 currentTaco.steps.append(step)
-                check_order(answersList, currentTaco)
+                check_order(answersList, currentTaco, StatsDict)
             currentTaco = nextTaco
         while currentTaco.tacosToMake > 0:
             if currentTaco.waitCycle == 0 and currentTaco.tacosToMake == currentTaco.qty:
@@ -174,7 +190,7 @@ def taquero(queue, answersList, ingrQty):  # Each "taquero" represents a thread
 
         step = Steps("Completed", "Suborder finished", currentTaco.Id)
         currentTaco.steps.append(step)
-        check_order(answersList, currentTaco)
+        check_order(answersList, currentTaco, StatsDict)
         threadTortillera.join()
     else:
         pass
