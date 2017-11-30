@@ -12,7 +12,7 @@ from threading import Thread
 lock = Lock()
 
 # Checks order completion
-def check_order(answersList, currentTaco, StatsDict):
+def check_order(answersList, currentTaco, StatsDict,received):
     for answer in answersList:
         size = 0
         for suborder in answer.order.subordersList:
@@ -42,7 +42,12 @@ def check_order(answersList, currentTaco, StatsDict):
                     StatsDict['Counter'] += 1
                     sqs = boto3.client('sqs')
                     message = (json.dumps(answer.__dict__(), indent=4))
-                    # response = sqs.send_message(QueueUrl='https://sqs.us-east-1.amazonaws.com/292274580527/cc406_response6', MessageBody=message)
+                    response = sqs.send_message(QueueUrl='https://sqs.us-east-1.amazonaws.com/292274580527/cc406_response6', MessageBody=message)
+                    for r in received:
+                        if answer.order.receipt == r:
+                            response = sqs.delete_message(QueueUrl='https://sqs.us-east-1.amazonaws.com/292274580527/cc406_team6', ReceiptHandle = r)
+                            received.remove(r)
+                    answersList.remove(answer)
                     print(message)
                     if StatsDict['Counter'] % 10 == 0:
                         charts(answersList, StatsDict)
@@ -137,7 +142,7 @@ def create_taco(tacos, currentTaco, ingrQty, tortillas):
 
 
 
-def taquero(queue, answersList, ingrQty, StatsDict):  # Each "taquero" represents a thread
+def taquero(queue, answersList, ingrQty, StatsDict, received):  # Each "taquero" represents a thread
     threadTortillera = Thread(target=produce_tortillas, args=(ingrQty, queue), daemon=True)  # Creates thread tortillera, produces the tortillas
     threadTortillera.start()
     tacos = 2  # Amount of tacos that a "taquero" can make at a time.
@@ -176,7 +181,7 @@ def taquero(queue, answersList, ingrQty, StatsDict):  # Each "taquero" represent
             if currentTaco.tacosToMake == 0:
                 step = Steps("Completed", "Suborder finished", currentTaco.Id)
                 currentTaco.steps.append(step)
-                check_order(answersList, currentTaco, StatsDict)
+                check_order(answersList, currentTaco, StatsDict, received)
             currentTaco = nextTaco
         while currentTaco.tacosToMake > 0:
             if currentTaco.waitCycle == 0 and currentTaco.tacosToMake == currentTaco.qty:
@@ -190,7 +195,7 @@ def taquero(queue, answersList, ingrQty, StatsDict):  # Each "taquero" represent
 
         step = Steps("Completed", "Suborder finished", currentTaco.Id)
         currentTaco.steps.append(step)
-        check_order(answersList, currentTaco, StatsDict)
+        check_order(answersList, currentTaco, StatsDict, received)
         threadTortillera.join()
     else:
         pass

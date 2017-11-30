@@ -14,9 +14,6 @@ def create_queues(queues):
     queues.append(othersQueue)
 
 def assign_queues(queues, answersList):
-    # asadaQueue = Queue()  # Suborders of meat asada
-    # adobadaQueue = Queue()  # Suborders of meat adobada
-    # othersQueue = Queue()  # Suborders of meat suadero, tripa, cabeza, and lengua
     for answer in answersList:
         for suborder in answer.order.subordersList:  # Each suborder will be assigned to its respective queue according to the type of meat
             if suborder.meat == 'Asada':
@@ -34,14 +31,11 @@ def assign_queues(queues, answersList):
                     if queues[2].empty():
                         threadPermits[2] = 1
                     queues[2].put(suborder)
-    # queues.append(asadaQueue)
-    # queues.append(adobadaQueue)
-    # queues.append(othersQueue)
 
 
-def classify_data(data, answersList):
+def classify_data(data, answersList, receipt):
     # Assignment of data for each order and suborder
-    order = Order(data['request_id'], data['datetime'])
+    order = Order(data['request_id'], data['datetime'], receipt)
     for suborder in data['orden']:
         order.totalSubs += 1
         taco = Suborder(suborder['part_id'], suborder['type'], suborder['meat'], suborder['quantity'],
@@ -51,7 +45,9 @@ def classify_data(data, answersList):
     answersList.append(answer)
 
 threadPermits = [0,0,0] # if 0 the thread shouldn't be thrown, if 1 it should be thrown
+answersList = []
 queues = []
+received = []
 def readSQS():
     StatsDict = {'Steps_Asada' : 0, 'Total_Asada' : 0, 'Time_Asada' : 0, 'Total_AsOrders' : 0, 'Steps_Adobada' : 0, 'Total_Adobada' : 0,'Time_Adobada' : 0,  'Total_AdOrders' : 0, 'Steps_Others' : 0, 'Total_Others' : 0, 'Time_Others' : 0, 'Total_OtOrders' : 0, 'Counter' : 0}
     sqs = boto3.client('sqs')
@@ -63,23 +59,13 @@ def readSQS():
     while True:
         try:
             response = sqs.receive_message(QueueUrl='https://sqs.us-east-1.amazonaws.com/292274580527/cc406_team6', MaxNumberOfMessages=10, WaitTimeSeconds=20)
-            received = []
-            answersList = []
-            # queues = []
             for message in response['Messages']:
                 received.append(message['ReceiptHandle'])
                 data = json.loads(message['Body'])
                 print(data)
-                classify_data(data, answersList)
+                classify_data(data, answersList,message['ReceiptHandle'])
             assign_queues(queues, answersList)
-            threads(queues, answersList, ingrQty,threadPermits,StatsDict)
-            # for answer in answersList:
-                # message = (json.dumps(answer.__dict__(), indent=4))
-                # print(message)
-                # response = sqs.send_message(QueueUrl='https://sqs.us-east-1.amazonaws.com/292274580527/cc406_response6', MessageBody=message)
-            # for r in received:
-            #     response = sqs.delete_message(QueueUrl='https://sqs.us-east-1.amazonaws.com/292274580527/cc406_team6', ReceiptHandle = r)
-            # charts(answersList)
+            threads(queues, answersList, ingrQty,threadPermits,StatsDict, received)
             time.sleep(10)
         except KeyboardInterrupt:
             raise

@@ -5,14 +5,14 @@ class Order(object):
     suborders = []
     stepsList = []
 
-    def __init__(self, Id, startTime):
+    def __init__(self, Id, startTime,receiptHandle):
         self.Id = Id  # String received from the SQS message
-        #self.startTime = datetime.strptime(startTime, "%Y-%m-%d %H:%M:%S")  # datetime received from the SQS message
-        self.startTime = datetime.now()
+        self.startTime = datetime.strptime(startTime, "%Y-%m-%d %H:%M:%S")  # datetime received from the SQS message
         self.endTime = datetime.now()  # Will be replaced by the time it finishes
         self.subordersList = []  # List of suborders
         self.completed = False  # when completed, will changed to True
         self.totalSubs = 0  # Amount of suborders in order.
+        self.receipt = receiptHandle
 
     def __iter__(self):
         return self
